@@ -3,24 +3,27 @@
     <style>
         .container{
             margin: 5%;
-            width: 55%;
-            height: 90%;
+            width: 700px;
+            height: 900px;
+        }
+        .right{float: right;}
+        .left{float: left;}
+        .none{float: none;}
+        .main{
+            clear: right;
+            float: left;
+            margin-top: -25px;
         }
         .image{
-            border: 2px solid gray;
             float: left;
-            margin: -1%;
+            border: 2px solid gray;
         }
-        .eurocon{
-            float: right;
-            width: 15%;
-            height: 15%;
-            margin-right: -5%;
+        .euroimg{
+            vertical-align: middle;
         }
         .eurotext{
-            float: right;
+            font-size: 48px;
             font-family: 'Alatsi';
-            font-size: 250%;
             color: purple;
         }
     </style>
@@ -31,16 +34,35 @@
 </head>
 <body class="container">
     <div>
-        <h2 class="eurotext">EUROPASS</h2>
-        <div class="eurocon">
-            <img src="euro.png" alt="image">
+        <div class="right">
+            <p class="eurotext"><img class="euroimg" src="euro.png" alt="image"> EUROPASS</p>
         </div>
-        <br>
-        <div>
-            <img class="image" src="unnamed.jpg" alt="image" width=10% height=10%>
+        <div class="main">
+            <img class="image" src="unnamed.jpg" alt="image" width=100px height=100px>
+            <ul class="left">
+                <h1>ZERO TWO (02)</h1>
+                <hr>
+                <table style="height:1px">
+                    <tr>
+                        <th>
+                            <p><b>Nazionalità: </b>Spazio</p>
+                        </th>
+                        <th>
+                            <p>(+39)0295939734</p>
+                        </th>
+                        <th>
+                            <p><a href="">eldrichhorror@gmail.com</a></p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td><p class="right">|</p></td>
+                        <td><p class="right">|</p></td>
+                        <td><p class="right">|</p></td>
+                    </tr>
+                </table>
+            </ul>
         </div>
-        <p s>&#x2022</p>
-        <br>
     </div>
+    <!-- <hr>&#x2022 -->
 </body>
 </html>
