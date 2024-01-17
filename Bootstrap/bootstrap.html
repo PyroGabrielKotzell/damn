@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+    <style>
+        .headText{
+            vertical-align: sub;
+        }
+    </style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +14,20 @@
     <title>Bootstrap layout</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <h2 style="color: green; font-family:Trebuchet;">Zuc Librarby</h2>
+            </div>
+            <div class="col-sm-5"></div>
+            <div class="headText">
+            <div class="col-sm-1"><b class="headText">Giallo</b></div>
+            <div class="col-sm-1"><d class="headText">Saggi</d></div>
+            <div class="col-sm-1">Fantasy</div>
+            <div class="col-sm-1">Horror</div>
+            <div class="col-sm-1">Favourites</div>
+            </div>
+        </div>
         <h1>My First Bootstrap Page</h1>
         <img src="pomodoro.png" alt="pomodoro" width="200px" height="200px">
         <p>This is some text.</p>
