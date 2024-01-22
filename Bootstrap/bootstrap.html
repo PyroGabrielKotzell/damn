@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <style>
-        .headText{
-            vertical-align: sub;
+        .Images{
+            height: 20%;
+            border: 1px solid black;
+            border-radius: 8px;
+            background-color:cornsilk;
         }
     </style>
 <head>
@@ -13,24 +16,76 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Bootstrap layout</title>
 </head>
-<body>
-    <div class="container-fluid">
+<body style="text-align: center;">
+    <div class="container-fluid" style="margin-top: 2%;">
         <div class="row">
             <div class="col-sm-2">
                 <h2 style="color: green; font-family:Trebuchet;">Zuc Librarby</h2>
             </div>
             <div class="col-sm-5"></div>
-            <div class="headText">
-            <div class="col-sm-1"><b class="headText">Giallo</b></div>
-            <div class="col-sm-1"><d class="headText">Saggi</d></div>
+            <div class="col-sm-1"><b>Giallo</b></div>
+            <div class="col-sm-1">Saggi</div>
             <div class="col-sm-1">Fantasy</div>
             <div class="col-sm-1">Horror</div>
-            <div class="col-sm-1">Favourites</div>
+            <div class="col-sm-1">
+                <div style="color:white; background-color: green; border-radius: 4px;">
+                    Favourites(3)
+                </div>
             </div>
         </div>
-        <h1>My First Bootstrap Page</h1>
-        <img src="pomodoro.png" alt="pomodoro" width="200px" height="200px">
-        <p>This is some text.</p>
-      </div>
+    </div>
+    <div class="container-fluid" style="margin-top: 3%; width: 90%;">
+        <div class="row">
+            <div class="col-sm-3">
+                <div style="font-size:300%; font-family: serif;">
+                    Fantasy
+                </div>
+            </div>
+            <div class="col-sm-5"></div>
+            <div class="col-sm-2">
+                <div style="color:white; background-color: green; border-radius: 100px;">
+                    default
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div style="border:1px solid grey ; background-color: white; border-radius: 100px;">
+                    A-Z
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row" style="width: 90%; text-align: start;">
+            <div class="col-xs-3">
+                <div class="Images">
+                    <img src="pomodoro.png" alt="pomodoro" width="300%" height="300%" style="border-radius: 8px;">
+                    <b>
+                        Pomodori sus
+                    </b>
+                    <p style="color: green;">
+                        L'impostore
+                    </p>
+                    <h6>
+                        Zuccante mogus
+                    </h6>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="Images">
+                    <img src="barbabietola.png" alt="barbabietola" width="300%" height="300%" style="border-radius: 8px;">
+                    <b>
+                        Barba-di-bietola
+                    </b>
+                    <p style="color: green;">
+                        Capitan barba
+                    </p>
+                    <h6>
+                        Zuccante mogus
+                    </h6>
+                </div>
+            </div>
+            <div class="col-xs-3"></div>
+            <div class="col-xs-3"></div>
+        </div>
+    </div>
 </body>
 </html>
