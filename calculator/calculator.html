@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .textBox{
+            margin-top: 10px;
+            border: 1px solid black;
+            width: 135px; height: 25px;
+            background-color: gainsboro;
+            text-align: end;
+            line-height: 25px;
+        }
+        .numBox{
+            margin-top: 1%;
+        }
+        .numBox > div > button > div{
+            width: 15px; height: 25px;
+            text-wrap: nowrap;
+            text-align: center;
+            line-height: 25px;
+        }
+    </style>
+
+    <script>
+        let text = " ";
+        function add(char){
+            let operand = isOp(char);
+            if (text.length < 20 && !(operand && text.length == 1)){
+                if (operand && isOp(text.charAt(text.length-1))){
+                    text = text.substring(0, text.length-1) + char;
+                }else text += char;
+            }
+            write();
+        }
+        function isOp(char){
+            switch(char){
+                case '+': return true;
+                case '-': return true;
+                case '/': return true;
+                case 'x': return true;
+            }
+            return false;
+        }
+        function clear(){
+            text = " ";
+            write();
+        }
+        function calculate(){
+            let result = 0;
+            for(let i = 0; i < text.length(); i++){
+            }
+            text = result.toString();
+            write();
+        }
+        function write(){
+            document.getElementById("txt").innerHTML = text;
+        }
+    </script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="numBox">
+        <div>
+            <button type="button" onclick="add(7)"><div>7</div></button>
+            <button type="button" onclick="add(8)"><div>8</div></button>
+            <button type="button" onclick="add(9)"><div>9</div></button>
+            <button type="button" onclick="add('x')"><div>x</div></button>
+        </div>
+        <div style="margin-top: 3px;">
+            <button type="button" onclick="add(4)"><div>4</div></button>
+            <button type="button" onclick="add(5)"><div>5</div></button>
+            <button type="button" onclick="add(6)"><div>6</div></button>
+            <button type="button" onclick="add('/')"><div>/</div></button>
+        </div>
+        <div style="margin-top: 3px;">
+            <button type="button" onclick="add(1)"><div>1</div></button>
+            <button type="button" onclick="add(2)"><div>2</div></button>
+            <button type="button" onclick="add(3)"><div>3</div></button>
+            <button type="button" onclick="add('+')"><div>+</div></button>
+        </div>
+        <div style="margin-top: 3px;">
+            <button type="button" onclick="clear()"><div>C</div></button>
+            <button type="button" onclick="add(0)"><div>0</div></button>
+            <button type="button" onclick="calculate()"><div>=</div></button>
+            <button type="button" onclick="add('-')"><div>-</div></button>
+        </div>
+    </div>
+    <div class="textBox" id="txt"></div>
+</body>
+</html>
