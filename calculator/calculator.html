@@ -21,14 +21,13 @@
     </style>
 
     <script>
-        let text = " ";
+        let text = "";
         function add(char){
+            if (text == "NaN") clearr();
             let operand = isOp(char);
-            if (text.length < 20 && !(operand && text.length == 1)){
-                if (operand && isOp(text.charAt(text.length-1))){
-                    text = text.substring(0, text.length-1) + char;
-                }else text += char;
-            }
+            if (operand && isOp(text.charAt(text.length-1))){
+                text = text.substring(0, text.length-1) + char;
+            }else if (text.length < 20) text += char;
             write();
         }
         function isOp(char){
@@ -40,16 +39,48 @@
             }
             return false;
         }
-        function clear(){
-            text = " ";
+        function isPM(char){
+            switch(char){
+                case '+': return true;
+                case '-': return true;
+            }
+            return false;
+        }
+        function clearr(){
+            text = "";
             write();
         }
         function calculate(){
-            let result = 0;
-            for(let i = 0; i < text.length(); i++){
+            if (text.charAt(0) == '-') text = 0 + text;
+            else if (isOp(text.charAt(0))) text = text.substring(1);
+            if (isOp(text.charAt(text.length-1))) text = text.substring(0, text.length-1);
+            let number1 = "";
+            let number2 = "";
+            let lastch = '';
+            let i = 0;
+            while (!isOp(text.charAt(i)) && i < text.length){
+                number1 += text.charAt(i);
+                i++;
             }
-            text = result.toString();
+            lastch = text.charAt(i);
+            for (i = ++i; i < text.length; i++){
+                if (isOp(text.charAt(i))){
+                    number1 = calcs(parseFloat(number1), parseFloat(number2), lastch);
+                    lastch = text.charAt(i);
+                }else number2 += text.charAt(i);
+            }
+            number1 = calcs(parseFloat(number1), parseFloat(number2), lastch);
+            text = number1 + "";
             write();
+        }
+        function calcs(n1, n2, op){
+            switch (op){
+                case '+': return n1 + n2;
+                case '-': return n1 - n2;
+                case '/': return n1 / n2;
+                case 'x': return n1 * n2;
+            }
+            return n1;
         }
         function write(){
             document.getElementById("txt").innerHTML = text;
@@ -81,10 +112,11 @@
             <button type="button" onclick="add('+')"><div>+</div></button>
         </div>
         <div style="margin-top: 3px;">
-            <button type="button" onclick="clear()"><div>C</div></button>
+            <button type="button" onclick="clearr()"><div>C</div></button>
             <button type="button" onclick="add(0)"><div>0</div></button>
-            <button type="button" onclick="calculate()"><div>=</div></button>
+            <button type="button" onclick="add('.')"><div>.</div></button>
             <button type="button" onclick="add('-')"><div>-</div></button>
+            <button type="button" onclick="calculate()"><div>=</div></button>
         </div>
     </div>
     <div class="textBox" id="txt"></div>
