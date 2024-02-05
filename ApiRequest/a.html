@@ -1,12 +1,47 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  .Images{
+    height: 20%;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color:cornsilk;
+  }
+</style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="elements" id="a"></div>
+</body>
+
   <script src="request.js"></script>
 
-  <script>tema = 'love';
-
+  <script>
+  tema = 'love';
+  let txt = "";
   data = getData(tema);
-  console.log(data.works);
+  bo = document.getElementById("a");
+  console.log(bo);
+
+  function createContent(image, alt, title, subject, author){
+    div = document.createElement("div");
+    txt = '<div class="col-xs-3"\><div class="Images"\><img src=';
+    txt += '"' + image + '" alt="' + alt + '" ';
+    txt += 'width="100%" height="100%" style="border-radius: 8px;"\><b\>';
+    txt += title + '</b\><p style="color: green;"\>';
+    txt += subject + '</p\><h6\>' + author + '</h6\></div\></div\>';
+    div.innerHTML = txt;
+    return div;
+  }
+
   data.works.forEach(element => {
-    console.log(element);
+    console.log(element.title);
+    const a = createContent('nnn', element.title, element.title, element.subject[0], element.authors[0].name);
+    document.body.appendChild(a);
   });
-</script>
+  //document.getElementById("a").innerHTML = txt;
+  </script>
 </html>

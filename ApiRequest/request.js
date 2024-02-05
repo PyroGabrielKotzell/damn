@@ -5,7 +5,7 @@ function getData(tema){
     
     if (request.status === 200) {
       console.log(JSON.parse(request.responseText));
-      return JSON.parse(request.responseText)
+      return JSON.parse(request.responseText);
     }
     else 
         return null;
