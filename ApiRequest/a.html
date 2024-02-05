@@ -6,25 +6,26 @@
     border: 1px solid black;
     border-radius: 8px;
     background-color:cornsilk;
+    margin-top: 5px;
   }
 </style>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <title>Document</title>
 </head>
 <body>
-  <div class="elements" id="a"></div>
+  <div class="row" id="contentRow"></div>
 </body>
 
   <script src="request.js"></script>
 
   <script>
   tema = 'love';
-  let txt = "";
   data = getData(tema);
-  bo = document.getElementById("a");
-  console.log(bo);
 
   function createContent(image, alt, title, subject, author){
     div = document.createElement("div");
@@ -37,11 +38,11 @@
     return div;
   }
 
+  bo = document.getElementById("contentRow");
   data.works.forEach(element => {
     console.log(element.title);
-    const a = createContent('nnn', element.title, element.title, element.subject[0], element.authors[0].name);
-    document.body.appendChild(a);
+    const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
+    bo.appendChild(a);
   });
-  //document.getElementById("a").innerHTML = txt;
   </script>
 </html>
