@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
-  .Images{
-    height: 20%;
+  div{display: block;}
+  .Book{
     border: 1px solid black;
     border-radius: 8px;
-    background-color:cornsilk;
+    background-color:ivory;
     margin-top: 5px;
+    height: 400px;
+  }
+  .imageBox{
+    height: 70%;
+    margin-top: 3px;
+  }
+  .textBox{
+    height: 30%;
+    overflow: scroll;
   }
 </style>
 <head>
@@ -17,32 +26,80 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <title>Document</title>
 </head>
-<body>
-  <div class="row" id="contentRow"></div>
+<body style="text-align: center;">
+  <div class="container-fluid" style="margin-top: 2%;">
+    <div class="row">
+        <div class="col-sm-2">
+            <h2 style="color: green; font-family:Trebuchet;">Zuc Librarby</h2>
+        </div>
+        <div class="col-sm-5"></div>
+        <div class="col-sm-1"><b>Giallo</b></div>
+        <div class="col-sm-1">Saggi</div>
+        <div class="col-sm-1">Fantasy</div>
+        <div class="col-sm-1">Horror</div>
+        <div class="col-sm-1">
+            <div style="color:white; background-color: green; border-radius: 4px; border: 1px solid black;">
+                Favourites(3)
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="container-fluid" style="margin-top: 3%; width: 90%;">
+    <div class="row">
+        <div class="col-sm-3">
+            <div style="font-size:300%; font-family: serif;">
+                Fantasy
+            </div>
+        </div>
+        <div class="col-sm-5"></div>
+        <div class="col-sm-2">
+            <div style="color:white; background-color: green; border-radius: 100px;">default</div>
+        </div>
+        <div class="col-sm-2">
+            <div style="border:1px solid grey ; background-color: white; border-radius: 100px;">A-Z</div>
+        </div>
+    </div>
+    <hr>
+    <div class="row" id="contentRow"></div>
+  </div>
 </body>
 
   <script src="request.js"></script>
 
   <script>
-  tema = 'love';
-  data = getData(tema);
-
-  function createContent(image, alt, title, subject, author){
-    div = document.createElement("div");
-    txt = '<div class="col-xs-3"\><div class="Images"\><img src=';
-    txt += '"' + image + '" alt="' + alt + '" ';
-    txt += 'width="100%" height="100%" style="border-radius: 8px;"\><b\>';
-    txt += title + '</b\><p style="color: green;"\>';
-    txt += subject + '</p\><h6\>' + author + '</h6\></div\></div\>';
-    div.innerHTML = txt;
-    return div;
-  }
-
+  tema = 'fantasy';
   bo = document.getElementById("contentRow");
+
+  data = getData(tema);
   data.works.forEach(element => {
     console.log(element.title);
     const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
     bo.appendChild(a);
   });
+  
+  function createContent(image, alt, title, subject, author){
+    div = document.createElement("div");
+    image = "https://covers.openlibrary.org/b/id/" + image + "-M.jpg"
+    txt = '<div class="col-sm-3"><div class="Book">';
+    txt += '<div class="imageBox"><img src="' + image + '" alt="' + alt + '" style="height: 100%; max-width: 100%; border-radius: 8px;"></div>';
+    txt += '<div class="textBox"><b>' + title + '</b>';
+    txt += '<p style="color: green;">' + subject + '</p>';
+    txt += '<h6>' + author + '</h6></div></div></div>';
+    div.innerHTML = txt;
+    return div;
+  }
+
+  </script>
+  <script>
+    function cambiaTema(newTema){
+      tema = newTema;
+      bo.childNodes.forEach(document.removeChild());
+      data = getData(tema);
+      data.works.forEach(element => {
+        console.log(element.title);
+        const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
+        bo.appendChild(a);
+      });
+    }
   </script>
 </html>
