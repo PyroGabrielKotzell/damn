@@ -59,7 +59,7 @@
       txt += '<div class="textBox"><b>' + title + '</b>';
       txt += '<p style="color: green;">' + subject + '</p>';
       txt += '<h6>' + author + '</h6></div></div>';
-      txt += '<button class="favButton" type="button" onclick="addToFav(\"' + title + '\")">Favourites</button></div>'
+      txt += '<button class="favButton" type="button" onclick="addToFav(\"' + title.replace(/'/g,"\\'") + '\")">Favourites</button></div>'
       div.innerHTML = txt;
       return div;
     }
