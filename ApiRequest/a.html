@@ -21,7 +21,7 @@
         <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('saggi')">Saggi</button></div>
         <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('fantasy')">Fantasy</button></div>
         <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('horror')">Horror</button></div>
-        <div class="col-sm-1"><button class="button" type="button" onclick="loadFav()">Favourites</button></div>
+        <div class="col-sm-1"><button class="button" id="favBooks" type="button" onclick="loadFav()">Favourites</button></div>
     </div>
   </div>
   <div class="container-fluid" style="margin-top: 3%; width: 90%;">
@@ -31,10 +31,10 @@
         </div>
         <div class="col-sm-5"></div>
         <div class="col-sm-2">
-            <div style="color:white; background-color: green; border-radius: 100px;">default</div>
+            <button class="button" id="favBooks" type="button" onclick="sortBooks(false)">Default</button>
         </div>
         <div class="col-sm-2">
-            <div style="border:1px solid grey ; background-color: white; border-radius: 100px;">A-Z</div>
+            <button class="button" id="favBooks" type="button" onclick="sortBooks(true)">A-Z</button>
         </div>
     </div>
     <hr>
@@ -47,6 +47,7 @@
   <script>
     let tema = 'fantasy';
     let content = document.getElementById("contentRow");
+    let titleTxt = document.getElementById("title");
     let books = [];
     let favourites = [];
     cambiaTema(tema);
@@ -59,7 +60,7 @@
       txt += '<div class="textBox"><b>' + title + '</b>';
       txt += '<p style="color: green;">' + subject + '</p>';
       txt += '<h6>' + author + '</h6></div></div>';
-      txt += '<button class="favButton" type="button" onclick="addToFav(\"' + title.replace(/'/g,"\\'") + '\")">Favourites</button></div>'
+      txt += '<button class="favButton" type="button" onclick="addToFav(\'' + title.replace(/'/g,"\\\&#39").replace(/"/g,"\\\&#34") + '\')">Favourites</button></div>'
       div.innerHTML = txt;
       return div;
     }
@@ -67,7 +68,6 @@
     function cambiaTema(newTema){
       change(newTema);
       works = getData(tema).works;
-      books = [];
       books = books.concat(works);
       works.forEach(element => {
         const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
@@ -75,15 +75,18 @@
       });
     }
 
-    function addToFav(title){
-      selBook = books.find(work => {work.title == title});
-      if (favourites.includes(selBook)) favourites.splice(favourites.indexOf(selBook), 1);
-      else favourites.push(selBook);
+    function addToFav(bookName){
+      let selBook = null;
+      books.forEach(work => {if(work.title === bookName) selBook = work});
+      if (favourites.includes(selBook)) {
+        favourites.splice(favourites.indexOf(selBook), 1);
+        if (titleTxt.innerHTML === "favourites".toUpperCase()) loadFav();
+      } else if (selBook != null) favourites.push(selBook);
+      if (favourites.length != 0) document.getElementById("favBooks").innerHTML = "Favourites (" + favourites.length + ")";
     }
 
     function loadFav(){
       change('favourites');
-      books = [];
       books = books.concat(favourites);
       favourites.forEach(element => {
         const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
@@ -93,8 +96,38 @@
 
     function change(title){
       tema = title;
-      document.getElementById("title").innerHTML = tema.toUpperCase();
+      titleTxt.innerHTML = tema.toUpperCase();
       while (content.firstChild) content.removeChild(content.firstChild);
+      books = [];
+    }
+
+    function sortBooks(doSort){
+      if (!doSort) {
+        while (content.firstChild) content.removeChild(content.firstChild);
+        books.forEach(element => {
+          const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
+          content.appendChild(a);
+        });
+        return;
+      }
+      while (content.firstChild) content.removeChild(content.firstChild);
+      let tmp = [];
+      tmp = tmp.concat(books);
+      tmp.sort(compareWork);
+      tmp.forEach(element => {
+        const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
+        content.appendChild(a);
+      });
+    }
+
+    function compareWork(a, b) {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
     }
   </script>
 </html>
