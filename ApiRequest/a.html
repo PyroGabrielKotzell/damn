@@ -1,26 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-  div{display: block;}
-  .Book{
-    border: 1px solid black;
-    border-radius: 8px;
-    background-color:ivory;
-    margin-top: 5px;
-    height: 400px;
-  }
-  .imageBox{
-    height: 70%;
-    margin-top: 3px;
-  }
-  .textBox{
-    height: 30%;
-    overflow: scroll;
-  }
-</style>
+<style src="style.css"></style>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -33,23 +17,17 @@
             <h2 style="color: green; font-family:Trebuchet;">Zuc Librarby</h2>
         </div>
         <div class="col-sm-5"></div>
-        <div class="col-sm-1"><b>Giallo</b></div>
-        <div class="col-sm-1">Saggi</div>
-        <div class="col-sm-1">Fantasy</div>
-        <div class="col-sm-1">Horror</div>
-        <div class="col-sm-1">
-            <div style="color:white; background-color: green; border-radius: 4px; border: 1px solid black;">
-                Favourites(3)
-            </div>
-        </div>
+        <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('giallo')">Giallo</button></div>
+        <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('saggi')">Saggi</button></div>
+        <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('fantasy')">Fantasy</button></div>
+        <div class="col-sm-1"><button class="button" type="button" onclick="cambiaTema('horror')">Horror</button></div>
+        <div class="col-sm-1"><button class="button" type="button" onclick="loadFav()">Favourites</button></div>
     </div>
   </div>
   <div class="container-fluid" style="margin-top: 3%; width: 90%;">
     <div class="row">
         <div class="col-sm-3">
-            <div style="font-size:300%; font-family: serif;">
-                Fantasy
-            </div>
+            <div id="title" style="font-size:300%; font-family: serif;">Fantasy</div>
         </div>
         <div class="col-sm-5"></div>
         <div class="col-sm-2">
@@ -67,39 +45,56 @@
   <script src="request.js"></script>
 
   <script>
-  tema = 'fantasy';
-  bo = document.getElementById("contentRow");
-
-  data = getData(tema);
-  data.works.forEach(element => {
-    console.log(element.title);
-    const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
-    bo.appendChild(a);
-  });
+    let tema = 'fantasy';
+    let content = document.getElementById("contentRow");
+    let books = [];
+    let favourites = [];
+    cambiaTema(tema);
   
-  function createContent(image, alt, title, subject, author){
-    div = document.createElement("div");
-    image = "https://covers.openlibrary.org/b/id/" + image + "-M.jpg"
-    txt = '<div class="col-sm-3"><div class="Book">';
-    txt += '<div class="imageBox"><img src="' + image + '" alt="' + alt + '" style="height: 100%; max-width: 100%; border-radius: 8px;"></div>';
-    txt += '<div class="textBox"><b>' + title + '</b>';
-    txt += '<p style="color: green;">' + subject + '</p>';
-    txt += '<h6>' + author + '</h6></div></div></div>';
-    div.innerHTML = txt;
-    return div;
-  }
+    function createContent(image, alt, title, subject, author){
+      div = document.createElement("div");
+      image = "https://covers.openlibrary.org/b/id/" + image + "-M.jpg"
+      txt = '<div class="col-sm-3"><div class="Book">';
+      txt += '<div class="imageBox"><img src="' + image + '" alt="' + alt + '" style="height: 100%; max-width: 100%; border-radius: 8px;"></div>';
+      txt += '<div class="textBox"><b>' + title + '</b>';
+      txt += '<p style="color: green;">' + subject + '</p>';
+      txt += '<h6>' + author + '</h6></div></div>';
+      txt += '<button class="favButton" type="button" onclick="addToFav(\"' + title + '\")">Favourites</button></div>'
+      div.innerHTML = txt;
+      return div;
+    }
 
-  </script>
-  <script>
     function cambiaTema(newTema){
-      tema = newTema;
-      bo.childNodes.forEach(document.removeChild());
-      data = getData(tema);
-      data.works.forEach(element => {
-        console.log(element.title);
+      change(newTema);
+      works = getData(tema).works;
+      books = [];
+      books = books.concat(works);
+      works.forEach(element => {
         const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
-        bo.appendChild(a);
+        content.appendChild(a);
       });
+    }
+
+    function addToFav(title){
+      selBook = books.find(work => {work.title == title});
+      if (favourites.includes(selBook)) favourites.splice(favourites.indexOf(selBook), 1);
+      else favourites.push(selBook);
+    }
+
+    function loadFav(){
+      change('favourites');
+      books = [];
+      books = books.concat(favourites);
+      favourites.forEach(element => {
+        const a = createContent(element.cover_id, element.title, element.title, element.subject[0], element.authors[0].name);
+        content.appendChild(a);
+      });
+    }
+
+    function change(title){
+      tema = title;
+      document.getElementById("title").innerHTML = tema.toUpperCase();
+      while (content.firstChild) content.removeChild(content.firstChild);
     }
   </script>
 </html>

@@ -1,0 +1,50 @@
+div{display: block;}
+.Book{
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color:ivory;
+    margin-top: 5px;
+    height: 400px;
+}
+.imageBox{
+    height: 70%;
+    margin-top: 3px;
+}
+.textBox{
+    height: 30%;
+    overflow: scroll;
+}
+.button {
+    border: none;
+    background-color: white; 
+    color: black;
+    padding: 4px 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 6px;
+}
+.button:hover {
+    background-color: green;
+    color: white;
+}
+.favButton {
+    border: none;
+    background-color: transparent; 
+    color: black;
+    padding: 4px 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 6px;
+}
+.favButton:hover {
+    background-color: gold;
+    color: black;
+}
