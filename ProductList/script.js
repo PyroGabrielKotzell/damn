@@ -33,6 +33,15 @@ function addProduct() {
 }
 
 function deleteProduct() {
+    let input = "";
+    do{
+        input = prompt('Specifica il codice del prodotto', '');
+        thereIsNot = prodotti.find(prod => {
+            return input2 === prod.code; 
+        }) == null;
+
+        if (thereIsNot) continue = confirm("Codice prodotto errato, continuare?");
+    }while (continue);    
     if (prodotti.includes(a)) prodotti.splice(prodotti.indexOf(a), 1);
     showProducts();
 }
