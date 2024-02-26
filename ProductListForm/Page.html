@@ -19,32 +19,41 @@
     </script>
 
     <form onsubmit="event.preventDefault(); validateMyForm();">
-        <label for="cat">Categoria:</label><br>
-        <select name="Categoria" id="cat">
-            <option value="cat1">cat1</option>
-            <option value="cat2">cat2</option>
-            <option value="cat3">cat3</option>
-            <option value="cat4">cat4</option>
-            <option value="cat5">cat5</option>
-            <option value="cat6">cat6</option>
-        </select><br><br>
-        <label for="code">Codice prodotto:</label><br>
-        <input type="text" id="code" name="code" pattern="[a-zA-Z0-9]{6}"><br><br>
-        <label for="name">Nome prodotto:</label><br>
-        <input type="text" id="name" name="nome" pattern="[a-zA-Z]"><br><br>
-        <label for="descrip">Descrizione:</label><br>
-        <input type="text" id="descrip" name="descrizione" title="La descrizione del prodotto"><br><br>
-        <label for="price">Prezzo:</label><br>
-        <input type="text" id="price" name="prezzo" pattern="^\d+\.?\d{1,}$"><br><br>
-        <p>Sconto:</p>
-            <input type="radio" id="10" name="sale" value="10">
-            <label for="10">10%</label><br>
-            <input type="radio" id="20" name="sale" value="20">
-            <label for="20">20%</label><br>
-            <input type="radio" id="30" name="sale" value="30">
-            <label for="30">30%</label><br><br>
-        <label for="inMag">In magazzino:</label>
-        <input type="checkbox" name="inMag" id="inMagz"><br><br>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="code">Codice prodotto:</label><br>
+                    <input type="text" id="code" name="code" pattern="[a-zA-Z0-9]{6}"><br><br>
+                    <label for="name">Nome prodotto:</label><br>
+                    <input type="text" id="name" name="nome" pattern="[a-zA-Z]"><br><br>
+                    <label for="descrip">Descrizione:</label><br>
+                    <input type="text" id="descrip" name="descrizione" title="La descrizione del prodotto"><br><br>
+                    <label for="price">Prezzo:</label><br>
+                    <input type="text" id="price" name="prezzo" pattern="^\d+\.?\d{1,}$"><br><br>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-5">
+                    <label for="cat">Categoria:</label><br>
+                    <select name="Categoria" id="cat">
+                        <option value="cat1">cat1</option>
+                        <option value="cat2">cat2</option>
+                        <option value="cat3">cat3</option>
+                        <option value="cat4">cat4</option>
+                        <option value="cat5">cat5</option>
+                        <option value="cat6">cat6</option>
+                    </select><br><br>
+                    <p>Sconto:</p>
+                    <input type="radio" id="10" name="sale" value="10">
+                    <label for="10">10%</label><br>
+                    <input type="radio" id="20" name="sale" value="20">
+                    <label for="20">20%</label><br>
+                    <input type="radio" id="30" name="sale" value="30">
+                    <label for="30">30%</label><br><br>
+                    <label for="inMag">In magazzino:</label>
+                    <input type="checkbox" name="inMag" id="inMagz"><br><br>
+                </div>
+            </div>
+        </div>
         <input type="submit" />
     </form>
 
