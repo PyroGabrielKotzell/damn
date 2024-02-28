@@ -8,17 +8,7 @@
 </head>
 
 <body>
-    <h1>Elenco prodotti</h1>
-
-    <div id="product-list"></div>
-
-    <script>
-        function validateMyForm(){
-            console.log("Form triggered!!!");
-        }
-    </script>
-
-    <form onsubmit="event.preventDefault(); validateMyForm();">
+    <form onsubmit="event.preventDefault(); tryAddProd();" id="prodForm">
         <div class="container-fluid"  style="background-color: lightgray; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border-radius: 8px;">
             <div class="row">
                 <div class="col-sm-5">
@@ -29,7 +19,7 @@
                     <label for="descrip">Descrizione:</label><br>
                     <input type="text" id="descrip" name="descrizione" title="La descrizione del prodotto"><br><br>
                     <label for="price">Prezzo:</label><br>
-                    <input type="text" id="price" name="prezzo" pattern="^\d+\.?\d{1,}$" title="Prezzo, possibile virgola"><br><br>
+                    <input type="text" id="price" name="prezzo" pattern="^\d+\.?\d{0,}$" title="Prezzo, possibile virgola"><br><br>
                 </div>
                 <div class="col-sm-2"></div>
                 <div class="col-sm-5">
@@ -43,19 +33,42 @@
                         <option value="cat6">cat6</option>
                     </select><br><br>
                     <p>Sconto:</p>
-                    <input type="radio" id="10" name="sale" value="10">
-                    <label for="10">10%</label><br>
-                    <input type="radio" id="20" name="sale" value="20">
-                    <label for="20">20%</label><br>
-                    <input type="radio" id="30" name="sale" value="30">
-                    <label for="30">30%</label><br><br>
+                    <div id="sconti">
+                        <input type="radio" id="10" name="sale" value="10">
+                        <label for="10">10%</label>
+                        <input type="radio" id="20" name="sale" value="20">
+                        <label for="20">20%</label>
+                        <input type="radio" id="30" name="sale" value="30">
+                        <label for="30">30%</label><br>
+                        <input type="radio" id="40" name="sale" value="40">
+                        <label for="40">40%</label>
+                        <input type="radio" id="50" name="sale" value="50">
+                        <label for="50">50%</label>
+                        <input type="radio" id="60" name="sale" value="60">
+                        <label for="60">60%</label><br>
+                        <input type="radio" id="70" name="sale" value="70">
+                        <label for="70">70%</label>
+                        <input type="radio" id="80" name="sale" value="80">
+                        <label for="80">80%</label>
+                        <input type="radio" id="90" name="sale" value="90">
+                        <label for="90">90%</label><br>
+                        <input type="radio" id="100" name="sale" value="100">
+                        <label for="100">100%</label><br><br>
+                    </div>
                     <label for="inMag">In magazzino:</label>
                     <input type="checkbox" name="inMag" id="inMagz"><br><br>
+                    <label for="inMag">Cancella prodotto:</label>
+                    <input type="checkbox" name="deleteProd" id="deleter" title="Utilizza il codice">
                 </div>
             </div>
         </div>
-        <input type="submit" />
+        <input type="submit" title="Invia" value="Invia"/>
     </form>
+    <div style="text-align: center; border: none;"><button type="button" id="sort-list" onclick="sortProducts()">Ordina lista</button></div>
+
+    <h1>Elenco prodotti</h1>
+
+    <div id="product-list"></div>
 
     <script src="script.js"></script>
 </body>

@@ -4,45 +4,87 @@ function showProducts() {
     list = document.getElementById("product-list");
     list.innerHTML = "";
     prodotti.forEach(product => {
-        list.innerHTML += '<div><i>' + product.nome + '</i>, ' + product.desc + ', ' + product.prezzo + '<b style="clear:both; float:right;">&euro; ' + product.code + '</b></div>';
+        list.innerHTML += '<div><i>' + product.nome + '</i>, ' +
+        product.desc + ', ' + product.categoria + ', ' + product.sconto + ', ' + product.presente + ', ' + product.code +
+        '<b style="clear:both; float:right;">&euro; ' + product.prezzo + '</b></div>';
     });
 }
 
-function addProduct() {
-    let input1 = takeIn('Specifica il nome del prodotto', "Il nome non puo' essere vuoto");
-    if (input1 == null) return;
-
-    let input2;
-    loop: while(true){
-        input2 = takeIn('Specifica il codice del prodotto', "Il codice non puo' essere vuoto");
-        if (input2 == null) return;
-        if (searchProd(input2)) {
-            alert("Codice prodotto gia' esistente");
-            continue loop;
-        } else break;
+function tryAddProd(){
+    form = document.querySelector("#prodForm");
+    
+    codice = form.querySelector("#code").value;
+    if (form.querySelector("#deleter").checked) {
+        deleteProduct(codice);
+        return;
     }
 
-    let input3 = takeIn('Specifica la descrizione del prodotto', "La descrizione non puo' essere vuota");
-    if (input1 == null) return;
+    nome = form.querySelector("#name").value;
+    desc = form.querySelector("#descrip").value;
+    categoria = form.querySelector("#cat").value;
+    prezzo = form.querySelector("#price").value;
 
-    let input4 = takeIn('Specifica il prezzo del prodotto', "Prezzo non valido");
-    if (input1 == null) return;
+    let sconto = null;
 
-    prodotti.push(product = { nome: input1, desc: input3, prezzo: input4, code: input2 });
+    radio = document.getElementById("sconti");
+    radio.childNodes.forEach(radioB => {
+        if (radioB.checked) sconto = radioB.value;
+    });
+    
+    presente = form.querySelector("#inMagz").checked;
+
+    addProduct(nome, desc, categoria, prezzo, sconto, presente, codice);
+}
+
+function addProduct(nome, desc, categoria, prezzo, sconto, presente, codice) {
+    if (nome == "") {
+        alert("Il nome e' vuoto");
+        return;
+    }
+    if (desc == "") {
+        alert("La descrizione e' vuota");
+        return;
+    }
+    if (categoria == null) {
+        alert("Errore con la categoria selezionata");
+        return;
+    }
+    if (prezzo == "") {
+        alert("Prezzo vuoto");
+        return;
+    }
+    if (sconto == null) {
+        alert("Sconto non selezionato");
+        return;
+    }
+    if (codice == "") {
+        alert("Il codice e' vuoto");
+        return;
+    }
+    if (searchProd(codice)) {
+        alert("Il Codice esiste gia'");
+        return;
+    }
+    let inMag = "";
+    if (presente) inMag = "Presente in Magazzino";
+    else inMag = "Non presente in Magazzino"
+
+    prodotti.push(product = { nome: nome, desc: desc, categoria: categoria, prezzo: prezzo, sconto: sconto + "%", presente: inMag, code: codice });
 
     showProducts();
 }
 
-function deleteProduct() {
-    let input;
+function deleteProduct(code) {
+    if (codice == "") {
+        alert("Il codice e' vuoto");
+        return;
+    }
+
     prodToDel = null;
-    loop: while(true){
-        input = takeIn('Specifica il codice del prodotto', "Il codice non puo' essere vuoto");
-        if (input == null) return;
-        if ((prodToDel = searchProd(input)) == null) {
-            alert("Codice prodotto non esistente");
-            continue loop;
-        } else break;
+
+    if ((prodToDel = searchProd(code)) == null) {
+        alert("Codice prodotto errato o non esistente");
+        return;
     }
 
     prodotti.splice(prodotti.indexOf(prodToDel), 1);
@@ -54,21 +96,6 @@ function sortProducts() {
     prodotti.sort(sortingAlg);
 
     showProducts();
-}
-
-function takeIn(message, errorMsg){
-    let input = "";
-
-    do {
-        valido = true;
-        input = prompt(message, '');
-        if (input == null) return null;
-        if (input == "") {
-            alert(errorMsg);
-            valido = false;
-        }
-    } while (!valido);
-    return input;
 }
 
 function searchProd(code){
