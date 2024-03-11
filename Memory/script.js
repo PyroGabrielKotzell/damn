@@ -32,11 +32,12 @@ function createBackCard(id){
     return d;
 }
 
-function createCard(url, id){
+function createCard(url){
     let d = document.createElement("div");
-    let txt = '<img class="carta" id="' + id + '" src="' + url + '" alt="carta">';
+    let txt = '<img class="carta" src="' + url + '" alt="carta">';
     d.innerHTML = txt;
     d.style.visibility="hidden";
+    cards.push(d);
     cards.push(d);
 }
 
@@ -58,9 +59,12 @@ function populate(){
         })
         .then(g => {
             for (let index = 0; index < 10; index++) {
-                if (n2 == 0) break;
+                if (n2 == 0) {
+                    cards.sort(() => Math.random() - 0.5);
+                    break;
+                }
                 let cardsCol = document.getElementById("cards" + ((index%4)+1));
-                if (n2 <= num) createCard(cardsTmp[index].url, n2);
+                if (n2 <= num) createCard(cardsTmp[index].url);
                 const c = createBackCard(n2);
                 cardsCol.appendChild(c);
                 n2 -= 1;
