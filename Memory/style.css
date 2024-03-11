@@ -1,3 +1,24 @@
+body{
+    background-image: url(table.jpg);
+    background-size: cover;
+}
+
+.row{
+    text-align: center;
+    background-color: ivory;
+    background-image: url(cloth.jpg);
+    border-radius: 10px;
+}
+
 .cardCon{
-    
+}
+
+.carta{
+    margin-top: 6px;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: lightgray;
+    height: 500px;
+    object-fit: fill;
+    margin-bottom: 6px;
 }
