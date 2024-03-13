@@ -1,27 +1,46 @@
-let num = takeIn('Quante carte del memory prendo?', "Specifica un numero valido");
+let num = 0;
 let cards = [];
 let cardsb = [];
 let card1 = null;
 let card2 = null;
 
-populate();
-
-function takeIn(message, errorMsg){
-    let input = NaN;
-    do {
-        valido = true;
-        input = Number(prompt(message, ''));
-        if (input == null) return null;
-        if (isNaN(input) || input <= 0) {
-            alert(errorMsg);
-            valido = false;
+function takeIn(cardnum){
+    num = cardnum.value;
+    let i = 1;
+    let col = document.getElementById("cards" + i);
+    while (col.firstChild) {
+        col.removeChild(col.firstChild);
+        if (!col.firstChild) {
+            i++;
+            if (i == 7) break;
+            col = document.getElementById("cards" + i);
         }
-    } while (!valido);
-    return input;
+    }
+    cards = [];
+    cardsb = [];
+    card1 = null;
+    card2 = null;
+    populate();
 }
 
 function activateCard(card){
-    console.log(card);
+    let int = parseInt(card.id);
+    if (card2){
+        if (card1.src != card2.src) {
+            document.getElementById(card2.id).parentElement.replaceChild(cardsb[parseInt(card2.id)].firstChild.cloneNode(true), document.getElementById(card2.id));
+            document.getElementById(card1.id).parentElement.replaceChild(cardsb[parseInt(card1.id)].firstChild.cloneNode(true), document.getElementById(card1.id));
+        }
+        card1 = null;
+        card2 = null;
+    }else if (card1){
+        card2 = cards[int].firstChild.cloneNode(true);
+        card2.id = int;
+        card.parentElement.replaceChild(card2.cloneNode(true), card);
+    }else{
+        card1 = cards[int].firstChild.cloneNode(true);
+        card1.id = int;
+        card.parentElement.replaceChild(card1.cloneNode(true), card);
+    }
 }
 
 function createBackCard(id){
@@ -34,17 +53,18 @@ function createBackCard(id){
 
 function createCard(url){
     let d = document.createElement("div");
-    let txt = '<img class="carta" src="' + url + '" alt="carta">';
+    let txt = '<img class="carta" id="0" src="' + url + '" alt="carta">';
     d.innerHTML = txt;
     d.style.visibility="hidden";
     cards.push(d);
-    cards.push(d);
+    cards.push(d.cloneNode(true));
 }
 
 function populate(){
     let cardsTmp = [];
     let n1 = num * 2;
     let n2 = num * 2;
+    let colIndex = 0;
     while (n1 > 0) {
         n1 -= 10;
         fetch("https://api.thecatapi.com/v1/images/search?limit=10")
@@ -55,19 +75,17 @@ function populate(){
             json.forEach(element => {
                 cardsTmp.push(element);
             });
-            return null;
-        })
-        .then(g => {
             for (let index = 0; index < 10; index++) {
                 if (n2 == 0) {
                     cards.sort(() => Math.random() - 0.5);
                     break;
                 }
-                let cardsCol = document.getElementById("cards" + ((index%4)+1));
+                let cardsCol = document.getElementById("cards" + ((colIndex%6)+1));
                 if (n2 <= num) createCard(cardsTmp[index].url);
-                const c = createBackCard(n2);
+                const c = createBackCard(n2 - 1);
                 cardsCol.appendChild(c);
-                n2 -= 1;
+                n2--;
+                colIndex++;
             }
         })
     }

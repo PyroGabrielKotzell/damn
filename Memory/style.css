@@ -18,7 +18,8 @@ body{
     border: 1px solid black;
     border-radius: 8px;
     background-color: lightgray;
-    height: 500px;
+    height: 280px;
+    width: 198.66px;
     object-fit: fill;
     margin-bottom: 6px;
 }
