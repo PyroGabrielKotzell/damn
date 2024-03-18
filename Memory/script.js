@@ -25,17 +25,19 @@ function takeIn(cardnum){
 
 function activateCard(card){
     let int = parseInt(card.id);
-    if (card2){
-        if (card1.src != card2.src) {
-            document.getElementById(card2.id).parentElement.replaceChild(cardsb[parseInt(card2.id)].firstChild.cloneNode(true), document.getElementById(card2.id));
-            document.getElementById(card1.id).parentElement.replaceChild(cardsb[parseInt(card1.id)].firstChild.cloneNode(true), document.getElementById(card1.id));
-        }
-        card1 = null;
-        card2 = null;
-    }else if (card1){
+    if (card1){
         card2 = cards[int].firstChild.cloneNode(true);
         card2.id = int;
         card.parentElement.replaceChild(card2.cloneNode(true), card);
+        setTimeout(() => {
+            if (card1 == null || card2 == null) return;
+            if (card1.src != card2.src) {
+                document.getElementById(card2.id).parentElement.replaceChild(cardsb[parseInt(card2.id)].firstChild.cloneNode(true), card2);
+                document.getElementById(card1.id).parentElement.replaceChild(cardsb[parseInt(card1.id)].firstChild.cloneNode(true), card1);
+            }
+            card1 = null;
+            card2 = null;
+        }, 1300);
     }else{
         card1 = cards[int].firstChild.cloneNode(true);
         card1.id = int;
@@ -82,7 +84,7 @@ function populate(){
                 }
                 let cardsCol = document.getElementById("cards" + ((colIndex%6)+1));
                 if (n2 <= num) createCard(cardsTmp[index].url);
-                const c = createBackCard(n2 - 1);
+                const c = createBackCard(cardsb.length);
                 cardsCol.appendChild(c);
                 n2--;
                 colIndex++;
