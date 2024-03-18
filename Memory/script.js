@@ -32,7 +32,7 @@ function activateCard(card){
         setTimeout(() => {
             if (card1 == null || card2 == null) return;
             if (card1.src != card2.src) {
-                document.getElementById(card2.id).parentElement.replaceChild(cardsb[parseInt(card2.id)].firstChild.cloneNode(true), card2);
+                document.getElementById(card2.id).parentElement.replaceChild(cardsb[parseInt(card2.id)].firstChild.cloneNode(true), document.getElementById(card2.id));
                 document.getElementById(card1.id).parentElement.replaceChild(cardsb[parseInt(card1.id)].firstChild.cloneNode(true), card1);
             }
             card1 = null;
