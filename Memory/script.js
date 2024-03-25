@@ -23,21 +23,28 @@ function takeIn(cardnum){
 
 function activateCard(card){
     let int = parseInt(card.id);
-    if (selected.length >= 1){
+    if (selected.length == 2) return;
+    if (selected.length > 0){
         selected.push(card);
+        card.onclick = null;
         card.src = cards[int].src;
-        setTimeout(() => {
-            if (selected.length == 0) return;
-            if (selected[0].src != selected[1].src) {
-                selected[0].src = "carta_retro.jpg";
-                selected[1].src = "carta_retro.jpg";
-            }
+        if (selected[0].src == selected[1].src) {
+            selected[0].style.borderColor = selected[1].style.borderColor = "white";
             selected.splice(0, 2);
-        }, 1300);
-    }else{
-        selected.push(card);
-        card.src = cards[int].src;
+        }
+        else setTimeout(() => {
+            let element1 = document.getElementById(selected[0].id);
+            let element2 = document.getElementById(selected[1].id);
+            selected[0].src = selected[1].src = "carta_retro.jpg";
+            selected[0].onclick = () => {activateCard(element1)};
+            selected[1].onclick = () => {activateCard(element2)};
+            selected.splice(0, 2);
+        }, 900);
+        return;
     }
+    selected.push(card);
+    card.onclick = null;
+    card.src = cards[int].src;
 }
 
 function createBackCard(id){
