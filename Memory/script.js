@@ -1,8 +1,7 @@
 let num = 0;
 let cards = [];
 let cardsb = [];
-let card1 = null;
-let card2 = null;
+let selected = [];
 
 function takeIn(cardnum){
     num = cardnum.value;
@@ -18,48 +17,47 @@ function takeIn(cardnum){
     }
     cards = [];
     cardsb = [];
-    card1 = null;
-    card2 = null;
+    selected = [];
     populate();
 }
 
 function activateCard(card){
     let int = parseInt(card.id);
-    if (card1){
-        card2 = cards[int].firstChild.cloneNode(true);
-        card2.id = int;
-        card.parentElement.replaceChild(card2.cloneNode(true), card);
+    if (selected.length >= 1){
+        selected.push(card);
+        card.src = cards[int].src;
         setTimeout(() => {
-            if (card1 == null || card2 == null) return;
-            if (card1.src != card2.src) {
-                document.getElementById(card2.id).parentElement.replaceChild(cardsb[parseInt(card2.id)].firstChild.cloneNode(true), document.getElementById(card2.id));
-                document.getElementById(card1.id).parentElement.replaceChild(cardsb[parseInt(card1.id)].firstChild.cloneNode(true), card1);
+            if (selected.length == 0) return;
+            if (selected[0].src != selected[1].src) {
+                selected[0].src = "carta_retro.jpg";
+                selected[1].src = "carta_retro.jpg";
             }
-            card1 = null;
-            card2 = null;
+            selected.splice(0, 2);
         }, 1300);
     }else{
-        card1 = cards[int].firstChild.cloneNode(true);
-        card1.id = int;
-        card.parentElement.replaceChild(card1.cloneNode(true), card);
+        selected.push(card);
+        card.src = cards[int].src;
     }
 }
 
 function createBackCard(id){
-    let d = document.createElement("div");
-    let txt = '<img class="carta" id="' + id + '" src="carta_retro.jpg" alt="retro" onclick="activateCard(this)">';
-    d.innerHTML = txt;
-    cardsb.push(d);
-    return d;
+    let img = document.createElement("img");
+    img.className = "carta";
+    img.id = id;
+    img.src = "carta_retro.jpg";
+    img.alt = "retro";
+    img.onclick = () => {activateCard(img)};
+    cardsb.push(img);
+    return img;
 }
 
 function createCard(url){
-    let d = document.createElement("div");
-    let txt = '<img class="carta" id="0" src="' + url + '" alt="carta">';
-    d.innerHTML = txt;
-    d.style.visibility="hidden";
-    cards.push(d);
-    cards.push(d.cloneNode(true));
+    let img = document.createElement("img");
+    img.src = url;
+    img.alt = "carta";
+    img.hidden = true;
+    cards.push(img);
+    cards.push(img.cloneNode(true));
 }
 
 function populate(){
