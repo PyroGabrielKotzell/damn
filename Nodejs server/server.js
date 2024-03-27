@@ -8,7 +8,7 @@ const {
     getSign,
     setSign,
     resetGrid,
-} = require("controller");
+} = require("./src/controller");
 
 const requestListener = function (req, res) {
     res.writeHead(200, {"Content-Type": "application/json"});
