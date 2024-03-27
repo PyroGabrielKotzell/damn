@@ -3,15 +3,17 @@ const http = require("http");
 const host = '192.168.4.22';
 const port = 8000;
 
-var callNumber = 0;
+const {
+    getGrid,
+    getSign,
+    setSign,
+    resetGrid,
+} = require("controller");
 
 const requestListener = function (req, res) {
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This is a JSON response : `+callNumber+`"}`);
-    callNumber = callNumber + 1;
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end();
 };
-
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
