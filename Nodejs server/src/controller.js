@@ -1,31 +1,88 @@
+const grid = require("./grid");
+
+// use getPostData from serverIO
+const { getPostData } = require('./serverIO')
+
 // GET
 // ip/tris
 async function getGrid(req, res){
+    // stringify the grid
     try {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify(Tris.getGrid()));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(grid.get()));
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
 // GET
-// ip/tris/:cell
-async function getSign(req, res, cell){
+// ip/tris/:cellNum
+async function getSign(req, res, cellNum){
+    // stringify the required cell
     try {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.end(JSON.stringify(Tris.getCell(cell)));
+        let cell = grid.getCell(cellNum);
+
+        if(!cell){
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Cell Not Found' }));
+        } else {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(cell));
+        }
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
 // PUT
-// ip/tris/:cell
-async function setSign(req, res, cell){
+// ip/tris/:cellNum
+async function setSign(req, res, cellNum){
+    // check if the cell exists, if the value is X or O, if the cell isn't already taken
+    // then stringify the new sign (changed cell)
+    try{
+        let cell = grid.getCell(cellNum);
+
+        if(!cell) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Cell Not Found' }));
+        } else if (cell.value != "N") {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Could Not Write To Cell, Already Set' }));
+        } else {
+            const body = await getPostData(req);
+            const value = JSON.parse(body);
+
+            if (value != "O" || value != "X"){
+                res.writeHead(401, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: 'Could Not Write To Cell, Wrong Sign' }));
+            } else {
+                const cellSign = { value: value || cell.value };
+                const sign = await grid.set(cellNum, cellSign);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(sign));
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // DELETE
 // ip/tris
 async function resetGrid(req, res){
+    // reset of the grid, need to check if the player disconnected or resigned
+    grid.reset();
+    try {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({message: 'Grid Has Been Resetted'}));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = {
+    getGrid,
+    getSign,
+    setSign,
+    resetGrid
 }

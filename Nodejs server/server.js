@@ -3,11 +3,12 @@ const http = require("http");
 const host = '192.168.4.22';
 const port = 8000;
 
+// use all this from the crontroller
 const {
     getGrid,
     getSign,
     setSign,
-    resetGrid,
+    resetGrid
 } = require("./src/controller");
 
 const requestListener = function (req, res) {
