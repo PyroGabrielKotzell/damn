@@ -26,7 +26,33 @@ function getPostData(req) {
     });
 }
 
+function getFile(path, res) {
+    fs.readFile(path, function(error, data){
+        if (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message: "Played like a damn fiddle", error: error}));
+        } else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(data);
+        }
+    });
+}
+
+function getScript(path, res) {
+    fs.readFile(path, function(error, data){
+        if (error) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({message: "Played like a damn fiddle", error: error}));
+        } else {
+            res.writeHead(200, { 'Content-Type': 'application' });
+            res.end(data);
+        }
+    });
+}
+
 module.exports = {
     writeDataToFile,
-    getPostData
+    getPostData,
+    getFile,
+    getScript
 }
