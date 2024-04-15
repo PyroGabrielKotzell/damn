@@ -3,6 +3,8 @@ const http = require("http");
 const host = '192.168.4.22';
 const port = 8000;
 
+let turn = false;
+
 // use all this from the crontroller
 const {
     getGrid,
@@ -14,9 +16,12 @@ const {
 const { getFile } = require("./src/serverIO");
 
 const requestListener = function (req, res) {
-    if (req.url === '/trisgame' && req.method === 'GET') {
+    if (req.url === '/tris/game' && req.method === 'GET') {
         getFile('./client/page.html', res);
-        getScript('./client/script.js', res);
+    } else if (req.url === '/tris/turn' && req.method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(turn));
+        turn = !turn;
     } else if (req.url === '/tris' && req.method === 'GET') {
         getGrid(req, res);
     } else if (req.url.match(/\/tris\/\w+/) && req.method === 'GET') {

@@ -8,8 +8,10 @@ const { getPostData } = require('./serverIO')
 async function getGrid(req, res){
     // stringify the grid
     try {
+        const cells = await grid.get();
+
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(grid.get()));
+        res.end(JSON.stringify(cells));
     } catch (error) {
         console.log(error);
     }

@@ -5,6 +5,22 @@
 <body>
     <div id="tmp" style="height: 100px; width: 100px; border: 10px solid red; margin: 10px;"></div>
     <button onclick="askChange()">aaaaa</button>
-    <script src="script.js"></script>
+
+    <script>
+        let turn = false;
+        fetch("http://192.168.4.22:8000/tris/turn")
+            .then(response => {
+                response.json().then(value => {
+                    turn = value == true;
+                    console.log(turn);
+                });
+            });
+        function askChange(){
+            fetch("http://192.168.4.22:8000/tris")
+                .then(response => {
+                    console.log(response);
+                })
+        }
+    </script>
 </body>
 </html>
