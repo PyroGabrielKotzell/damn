@@ -1,7 +1,9 @@
 const grid = require("./grid");
 
 // use getPostData from serverIO
-const { getPostData } = require('./serverIO')
+const { getPostData } = require('./serverIO');
+
+let turn = false;
 
 // GET
 // ip/tris
@@ -58,6 +60,7 @@ async function setSign(req, res, cellNum){
                 res.writeHead(401, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ message: 'Could Not Write To Cell, Wrong Sign' }));
             } else {
+                turn = !turn;
                 const cellSign = { value: value || cell.value };
                 const sign = await grid.set(cellNum, cellSign);
                 res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -86,5 +89,6 @@ module.exports = {
     getGrid,
     getSign,
     setSign,
-    resetGrid
+    resetGrid,
+    turn
 }
