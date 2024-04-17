@@ -24,12 +24,13 @@ const requestListener = function (req, res) {
         res.end(JSON.stringify(turn));
     } else if (req.url === '/tris' && req.method === 'GET') {
         getGrid(req, res);
-    } else if (req.url.match(/\/tris\/\w+/) && req.method === 'GET') {
+    } else if (req.url.match(/\/tris\/\w/) && req.method === 'GET') {
         const id = req.url.split('/')[2];
         getSign(req, res, id);
-    } else if (req.url.match(/\/tris\/\w+/) && req.method === 'PUT') {
+    } else if (req.url.match(/\/tris\/\w\/\w+/) && req.method === 'PUT') {
         const id = req.url.split('/')[2];
-        setSign(req, res, id);
+        const player = req.url.split('/')[3];
+        setSign(req, res, id, player);
     } else if (req.url === '/tris' && req.method === 'DELETE') {
         resetGrid(req, res);
     } else {

@@ -39,8 +39,8 @@ async function getSign(req, res, cellNum){
 }
 
 // PUT
-// ip/tris/:cellNum
-async function setSign(req, res, cellNum){
+// ip/tris/:cellNum/:player
+async function setSign(req, res, cellNum, player){
     // check if the cell exists, if the value is X or O, if the cell isn't already taken
     // then stringify the new sign (changed cell)
     try{
@@ -60,6 +60,8 @@ async function setSign(req, res, cellNum){
                 res.writeHead(401, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ message: 'Could Not Write To Cell, Wrong Sign' }));
             } else {
+                // player in controller
+                if (player == "true" && turn)
                 turn = !turn;
                 const cellSign = { value: value || cell.value };
                 const sign = await grid.set(cellNum, cellSign);
