@@ -1,6 +1,6 @@
 const http = require("http");
 
-const host = '192.168.4.22';
+const host = '192.168.4.23';
 const port = 8000;
 
 // use all this from the crontroller
@@ -28,6 +28,7 @@ const requestListener = function (req, res) {
         const id = req.url.split('/')[2];
         getSign(req, res, id);
     } else if (req.url.match(/\/tris\/\w\/\w+/) && req.method === 'PUT') {
+        console.log("put")
         const id = req.url.split('/')[2];
         const player = req.url.split('/')[3];
         setSign(req, res, id, player);

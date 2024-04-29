@@ -83,7 +83,7 @@
         let player = false;
         let grid = null;
         
-        let ip = "http://192.168.4.22:8000";
+        let ip = "http://192.168.4.23:8000";
         
         // get player
         fetch(ip + "/tris/turn")
@@ -123,7 +123,18 @@
             let turn = await getTurn();
             if(document.getElementById("btn" + number).innerHTML != '' || turn != player) return;
             
-            // make post
+            // make put
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: 'Fetch PUT Request Example' })
+            };
+
+            fetch(ip + "/tris/" + number + "/" + player, requestOptions)
+            .then(responce => {
+                console.log(responce)
+            });
+
             if(player) document.getElementById("btn" + number).innerHTML = '<b>O</b>';
             else document.getElementById("btn" + number).innerHTML = '<b>X</b>';
             
