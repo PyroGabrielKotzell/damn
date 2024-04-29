@@ -17,17 +17,14 @@
         color: black;
         vertical-align: middle;
     }
-    
     .btn-group:after {
         content: "";
         clear: both;
         display: table;
     }
-    
     .btn-group button:not(:last-child) {
         border-right: none;
     }
-    
     .btn-group button:hover {
         background-color: #e4ffe5;
     }
@@ -49,7 +46,6 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
-        
     }
     #resetBtn{
         margin-top: 20px;
@@ -92,7 +88,7 @@
         let player = false;
         let grid = null;
         
-        let ip = "http://192.168.4.23:8000";
+        let ip = "http://192.168.4.22:8000";
         
         // get player
         fetch(ip + "/tris/turn")
@@ -111,7 +107,6 @@
             }).then(value => {
                 return value;
             });
-            console.log("turno: " + ret);
             return ret;
         }
         
@@ -123,14 +118,14 @@
             }).then(value => {
                 return value;
             });
-            console.log("griglia:");
-            console.log(grid);
         }
         
         // if button clicked
         async function clicked(number){
             let turn = await getTurn();
             if(document.getElementById("btn" + number).innerHTML != '' || turn != player) return;
+
+            console.log("player: " + player + ", cell: " + number + ", server turn: " + turn);
             
             // make put
             const requestOptions = {
@@ -140,21 +135,37 @@
             };
 
             fetch(ip + "/tris/" + number + "/" + player, requestOptions)
-            .then(responce => {
-                console.log(responce)
+            .then(response => {
+                console.log(response)
             });
             
             updateButtons();
         }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
         
+        if (player == "false") updateButtons();
+
         async function updateButtons(){
-            let newGrid = await updateGrid();
-            if (newGrid) grid = newGrid;
+            await updateGrid();
             for (let i = 0; i < 9; i++) {
                 let val = grid[i].value;
                 if (val != "N") document.getElementById("btn" + (i + 1)).innerHTML = '<b>' + val + '</b>';
             }
+
+            if (await getTurn() != player)
+                while (true){
+                    await updateGrid();
+                    if (await getTurn() == player) {
+                        updateButtons();
+                        break;
+                    }
+                    await sleep(2000);
+                }
         }
+        
         async function reset(){
             const requestOptions = {
                 method: 'DELETE',
@@ -164,6 +175,7 @@
             .then(responce => {
                 console.log(responce)
             });
+            updateButtons();
         }
     </script>
 </body>

@@ -30,7 +30,7 @@ const requestListener = function (req, res) {
     } else if (req.url.match(/\/tris\/\w\/\w+/) && req.method === 'PUT') {
         const id = req.url.split('/')[2];
         const player = req.url.split('/')[3];
-        console.log("player: " + player + ", wanted to put in: " + id + ", turn: " + getTurn());
+        console.log("player: " + player + ", cell: " + id + ", server turn: " + getTurn());
         setSign(req, res, id, player);
     } else if (req.url === '/tris' && req.method === 'DELETE') {
         resetGrid(req, res);
