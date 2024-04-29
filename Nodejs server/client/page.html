@@ -51,6 +51,12 @@
         object-fit: contain;
         
     }
+    #resetBtn{
+        margin-top: 20px;
+        width: 70px;
+        height: 30px;
+        border-radius: 20px;
+    }
 </style>
 <body>
     <div id="tutto">
@@ -76,6 +82,9 @@
                 <button id="btn9" onclick="clicked(9)"></button>
             </div>
         </div>
+        <div id="resetButton">
+            <button id="resetBtn" onclick="reset()">RESET</button>
+        </div>
     </div>
     
     
@@ -83,7 +92,7 @@
         let player = false;
         let grid = null;
         
-        let ip = "http://192.168.4.22:8000";
+        let ip = "http://192.168.4.23:8000";
         
         // get player
         fetch(ip + "/tris/turn")
@@ -145,6 +154,16 @@
                 let val = grid[i].value;
                 if (val != "N") document.getElementById("btn" + (i + 1)).innerHTML = '<b>' + val + '</b>';
             }
+        }
+        async function reset(){
+            const requestOptions = {
+                method: 'DELETE',
+            };
+
+            fetch(ip + "/tris", requestOptions)
+            .then(responce => {
+                console.log(responce)
+            });
         }
     </script>
 </body>
