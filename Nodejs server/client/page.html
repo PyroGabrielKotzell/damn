@@ -83,7 +83,7 @@
         let player = false;
         let grid = null;
         
-        let ip = "http://192.168.4.23:8000";
+        let ip = "http://192.168.4.22:8000";
         
         // get player
         fetch(ip + "/tris/turn")
@@ -134,15 +134,17 @@
             .then(responce => {
                 console.log(responce)
             });
-
-            if(player) document.getElementById("btn" + number).innerHTML = '<b>O</b>';
-            else document.getElementById("btn" + number).innerHTML = '<b>X</b>';
             
             updateButtons();
         }
         
         async function updateButtons(){
-            await updateGrid();
+            let newGrid = await updateGrid();
+            if (newGrid) grid = newGrid;
+            for (let i = 0; i < 9; i++) {
+                let val = grid[i].value;
+                if (val != "N") document.getElementById("btn" + (i + 1)).innerHTML = '<b>' + val + '</b>';
+            }
         }
     </script>
 </body>

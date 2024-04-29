@@ -21,7 +21,7 @@ function set(ncell, sign){
     // resolve the updated cell after updating the json
     return new Promise((resolve, reject) => {
         const index = Tris.findIndex((c) => c.cell === ncell);
-        Tris[index] = {id, ...sign};
+        Tris[index] = {ncell, ...sign};
         if (process.env.NODE_ENV !== 'test') {
             writeDataToFile('gridformat.json', Tris);
         }
