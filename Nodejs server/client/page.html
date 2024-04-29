@@ -171,7 +171,7 @@
                 method: 'DELETE',
             };
 
-            fetch(ip + "/tris", requestOptions)
+            await fetch(ip + "/tris", requestOptions)
             .then(responce => {
                 console.log(responce)
             });
