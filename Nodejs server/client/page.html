@@ -97,6 +97,7 @@
         }).then(value => {
             player = value;
             console.log("giocatore: " + player);
+            if (player == true) updateButtons();
         });
         
         // get turn
@@ -145,8 +146,6 @@
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
-        
-        if (player == "false") updateButtons();
 
         async function updateButtons(){
             await updateGrid();
@@ -157,6 +156,7 @@
 
             if (await getTurn() != player)
                 while (true){
+                    console.log("update");
                     await updateGrid();
                     if (await getTurn() == player) {
                         updateButtons();
