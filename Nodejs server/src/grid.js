@@ -17,11 +17,11 @@ function getCell(ncell){
     });
 }
 
-function set(ncell, sign){
+function set(cell, sign){
     // resolve the updated cell after updating the json
     return new Promise((resolve, reject) => {
-        const index = Tris.findIndex((c) => c.cell === ncell);
-        Tris[index] = {ncell, ...sign};
+        const index = Tris.findIndex((c) => c.cell === cell);
+        Tris[index] = {cell, ...sign};
         if (process.env.NODE_ENV !== 'test') {
             writeDataToFile('gridformat.json', Tris);
         }

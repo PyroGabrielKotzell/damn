@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+    <title>Distance</title>
+</head>
+<body style="text-align: center; vertical-align: middle;">
+    <h1>Distanza</h1>
+    <form >
+        <label>Capoluogo 1</label>&nbsp;<select name="nome1" id="select1" onclick="sel(false)">
+            <option value="Belluno">Belluno</option>
+            <option value="Padova">Padova</option>
+            <option value="Rovigo">Rovigo</option>
+            <option value="Treviso">Treviso</option>
+            <option value="Venezia">Venezia</option>
+            <option value="Verona">Verona</option>
+            <option value="Vicenza">Vicenza</option>
+        </select><br>
+        <label>Capoluogo 2</label>&nbsp;<select name="nome2" id="select2" onclick="sel(true)">
+            <option value="Belluno">Belluno</option>
+            <option value="Padova">Padova</option>
+            <option value="Rovigo">Rovigo</option>
+            <option value="Treviso">Treviso</option>
+            <option value="Venezia">Venezia</option>
+            <option value="Verona">Verona</option>
+            <option value="Vicenza">Vicenza</option>
+        </select><br><br>
+        <label>Passa da venezia</label>&nbsp;<input type="checkbox" name="venezia" id="checkbox"><br><br>
+        <input type="submit" value="submit" onclick="sub(event)">
+    </form>
+</body>
+</html>
+
+<script>
+    let selection1 = document.getElementById("select1");
+    let selection2 = document.getElementById("select2");
+    let hiddenV1 = null;
+    let hiddenV2 = null;
+    let ip = "192.168.1.22";
+
+    function sub(event){
+        event.preventDefault();
+
+        get();
+    }
+
+    async function get() {
+        await fetch("${ip}");
+        alert("shit yourself");
+    }
+
+    function sel(sw){
+        if (sw) {
+            if (hiddenV1) hiddenV1.hidden = false;
+            selection2.childNodes.forEach(child => {
+                if (child.innerHTML == selection1.value) {
+                    child.hidden = true;
+                    hiddenV2 = child;
+                }
+            });
+        } else {
+            if (hiddenV2) hiddenV1.hidden = false;
+            selection1.childNodes.forEach(child => {
+                if (child.innerHTML == selection2.value) {
+                    child.hidden = true;
+                    hiddenV1 = child;
+                }
+            });
+        }
+    }
+</script>

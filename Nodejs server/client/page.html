@@ -97,7 +97,7 @@
         }).then(value => {
             player = value;
             console.log("giocatore: " + player);
-            if (player == true) updateButtons();
+            //updateButtons();
         });
         
         // get turn
@@ -175,7 +175,8 @@
             .then(responce => {
                 console.log(responce)
             });
-            updateButtons();
+
+            await updateButtons();
         }
     </script>
 </body>
