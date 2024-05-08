@@ -91,7 +91,7 @@
         let havinto = false;
         let grid = null;
         
-        let ip = "http://192.168.4.22:8000";
+        let ip = "http://192.168.4.23:8000";
         
         fetchStuff();
 
@@ -114,20 +114,22 @@
                 await updateGrid();
                 updateButtons();
                 check();
-                await sleep(2000);
+                await sleep(1000);
             }
         }
 
         async function check(){
-            let chi = -1;
-            grid
-            if (chi > -1){
+            let chi = await haiVinto();
+            if (chi == -1) if (await pareggio()) chi = 0;
                 havinto = true;
                 let out = document.getElementById("out");
                 if (chi == 0) out.innerHTML = "stalla";
                 if (chi == 1) out.innerHTML = "ha vinto il giocatore 1";
                 if (chi == 2) out.innerHTML = "ha vinto il giocatore 2";
-            }
+                if (chi == -1){
+                    havinto = false;
+                    out.innerHTML = '';
+                }
         }
         
         // get turn
@@ -203,44 +205,31 @@
         //funzione di controllo per verificare la vittoria di uno dei 2 giocatori
 async function haiVinto() {
     let schema = [
-        [grid[0], grid[1], grid[2]],
-        [grid[3], grid[4], grid[5]],
-        [grid[6], grid[7], grid[8]]
+        [grid[0].value, grid[1].value, grid[2].value],
+        [grid[3].value, grid[4].value, grid[5].value],
+        [grid[6].value, grid[7].value, grid[8].value]
     ]
   for (let i = 0; i < 3; i++) {
     if (
       (schema[i][0] !== 'N' && schema[i][0] === schema[i][1] && schema[i][0] === schema[i][2]) ||
       (schema[0][i] !== 'N' && schema[0][i] === schema[1][i] && schema[0][i] === schema[2][i])
-    ) {
-      return true;
-    }
+    ) return 1;
   }
   if (
     (schema[0][0] !== 'N' && schema[0][0] === schema[1][1] && schema[0][0] === schema[2][2]) ||
     (schema[0][2] !== 'N' && schema[0][2] === schema[1][1] && schema[0][2] === schema[2][0])
-  ) {
-    return true;
-  }
-  return false;
+  ) return 2;
+  return -1;
 }
 
 // controlla se i giocatori hanno pareggiato 
 async function pareggio() {
-
-    let schema = [
-        [grid[0], grid[1], grid[2]],
-        [grid[3], grid[4], grid[5]],
-        [grid[6], grid[7], grid[8]]
-    ]
-
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
-      if (schema[row][col] === 'N') {
-        return false;
-      }
+    console.log(grid)
+    for (let i = 0; i < grid.length; i++) {
+        if (grid[i].value == "N") return false;
+        
     }
-  }
-  return true;
+    return true;
 }
     </script>
 </body>
