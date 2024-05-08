@@ -88,97 +88,106 @@
     
     <script>
         let player = false;
-        let havinto = false;
+        let fineRound = false;
         let grid = null;
         
-        let ip = "http://192.168.4.23:8000";
+        let ip = "http://192.168.4.22:8000";
         
-        fetchStuff();
-
+        start();
+        
         // get player
-        async function fetchStuff(){
+        async function start(){
             await fetch(ip + "/tris/turn")
             .then(response => {
-                return response.json()
+                return response.json();
             }).then(value => {
                 player = value;
                 console.log("giocatore: " + player);
             });
-
+            
             continuousUpdate();
         }
-
+        
+        // continuously fetches for updates
         async function continuousUpdate(){
             while (true){
                 console.log("update");
                 await updateGrid();
                 updateButtons();
                 check();
-                await sleep(1000);
+                await sleep(500);
             }
         }
-
+        
+        // checks who won (if someome did)
         async function check(){
             let chi = await haiVinto();
-            if (chi == -1) if (await pareggio()) chi = 0;
-                havinto = true;
-                let out = document.getElementById("out");
-                if (chi == 0) out.innerHTML = "stalla";
-                if (chi == 1) out.innerHTML = "ha vinto il giocatore 1";
-                if (chi == 2) out.innerHTML = "ha vinto il giocatore 2";
-                if (chi == -1){
-                    havinto = false;
+            if (chi == -1) {
+                if (await pareggio()) chi = 0;
+                else {
+                    fineRound = false;
                     out.innerHTML = '';
+                    return;
                 }
+            }
+            fineRound = true;
+            let out = document.getElementById("out");
+            if (chi == 0) out.innerHTML = "stalla";
+            if (chi == 1) out.innerHTML = "ha vinto il giocatore 1";
+            if (chi == 2) out.innerHTML = "ha vinto il giocatore 2";
         }
         
-        // get turn
+        // gets the server turn
         async function getTurn(){
-            let ret = await fetch(ip + "/tris/turn")
+            return await fetch(ip + "/tris/turn")
             .then(response => {
-                return response.json()
+                return response.json();
             }).then(value => {
                 return value;
             });
-            return ret;
         }
         
-        // update the grid
+        // updates the grid with the server one
         async function updateGrid(){
             grid = await fetch(ip + "/tris")
             .then(response => {
-                return response.json()
+                return response.json();
             }).then(value => {
                 return value;
             });
         }
         
-        // if button clicked
+        // if button was clicked clicked
         async function clicked(number){
             let turn = await getTurn();
-            if(document.getElementById("btn" + number).innerHTML != '' || turn != player || havinto) return;
-
+            
+            // exit whether the button is full, it's not your turn, or the game has stopped
+            if(document.getElementById("btn" + number).innerHTML != '' || turn != player || fineRound) return;
+            
             console.log("player: " + player + ", cell: " + number + ", server turn: " + turn);
             
-            // make put
+            // make put of sign
             const requestOptions = {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: 'Fetch PUT Request Example' })
             };
-
-            fetch(ip + "/tris/" + number + "/" + player, requestOptions)
+            
+            await fetch(ip + "/tris/" + number + "/" + player, requestOptions)
             .then(response => {
-                console.log(response)
+                console.log(response);
             });
             
+            // update the buttons
             updateButtons();
         }
-
+        
+        // function to sleep for the timer
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
-
+        
+        // function that updates the buttons
         async function updateButtons(){
             await updateGrid();
             for (let i = 0; i < 9; i++) {
@@ -188,49 +197,70 @@
             }
         }
         
+        // function to reset the board state
         async function reset(){
             const requestOptions = {
-                method: 'DELETE',
+                method: 'DELETE'
             };
-
+            
             await fetch(ip + "/tris", requestOptions)
             .then(responce => {
-                console.log(responce)
+                console.log(responce);
             });
-            havinto = false;
+            
+            fineRound = false;
             document.getElementById("out").innerHTML = '';
-            await updateButtons();
+            
+            updateButtons();
         }
-
-        //funzione di controllo per verificare la vittoria di uno dei 2 giocatori
-async function haiVinto() {
-    let schema = [
-        [grid[0].value, grid[1].value, grid[2].value],
-        [grid[3].value, grid[4].value, grid[5].value],
-        [grid[6].value, grid[7].value, grid[8].value]
-    ]
-  for (let i = 0; i < 3; i++) {
-    if (
-      (schema[i][0] !== 'N' && schema[i][0] === schema[i][1] && schema[i][0] === schema[i][2]) ||
-      (schema[0][i] !== 'N' && schema[0][i] === schema[1][i] && schema[0][i] === schema[2][i])
-    ) return 1;
-  }
-  if (
-    (schema[0][0] !== 'N' && schema[0][0] === schema[1][1] && schema[0][0] === schema[2][2]) ||
-    (schema[0][2] !== 'N' && schema[0][2] === schema[1][1] && schema[0][2] === schema[2][0])
-  ) return 2;
-  return -1;
-}
-
-// controlla se i giocatori hanno pareggiato 
-async function pareggio() {
-    console.log(grid)
-    for (let i = 0; i < grid.length; i++) {
-        if (grid[i].value == "N") return false;
         
-    }
-    return true;
-}
+        // function to check which player won
+        async function haiVinto() {
+            let values = [
+            [grid[0].value, grid[1].value, grid[2].value],
+            [grid[3].value, grid[4].value, grid[5].value],
+            [grid[6].value, grid[7].value, grid[8].value]
+            ]
+            
+            let condition1 = false;
+            let condition2 = false;
+            
+            for (let i = 0; i < 3; i++) {
+                let symbol = '';
+                condition1 = (values[i][0] !== 'N' && values[i][0] === values[i][1] && values[i][0] === values[i][2]);
+                condition2 = (values[0][i] !== 'N' && values[0][i] === values[1][i] && values[0][i] === values[2][i]);
+                if (condition1) symbol = values[i][0];
+                if (condition2) symbol = values[0][1];
+                
+                if (condition1 || condition2) {
+                    if (symbol == 'X'){
+                        return 2;
+                    }
+                    return 1;
+                }
+            }
+            
+            condition1 = (values[0][0] !== 'N' && values[0][0] === values[1][1] && values[0][0] === values[2][2]);
+            condition2 = (values[0][2] !== 'N' && values[0][2] === values[1][1] && values[0][2] === values[2][0]);
+            if (condition1) symbol = values[0][0];
+            if (condition2) symbol = values[0][2];
+            
+            if (condition1 || condition2) {
+                if (symbol == 'X'){
+                    return 2;
+                }
+                return 1;
+            }
+            return -1;
+        }
+        
+        // function to check if the board is full (after the check for the win)
+        async function pareggio() {
+            for (let i = 0; i < grid.length; i++) {
+                if (grid[i].value == "N") return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>
