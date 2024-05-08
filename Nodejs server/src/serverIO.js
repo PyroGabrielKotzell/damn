@@ -35,8 +35,6 @@ function getFile(path, res) {
             res.end(JSON.stringify({message: "Played like a damn fiddle", error: error}));
         } else {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.json = {turn: t};
-            t++;
             res.end(data);
         }
     });

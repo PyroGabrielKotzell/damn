@@ -1,8 +1,5 @@
 const grid = require("./grid");
 
-// use getPostData from serverIO
-const { getPostData } = require('./serverIO');
-
 let turn = false;
 
 // GET
