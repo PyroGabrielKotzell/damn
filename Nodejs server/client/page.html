@@ -85,13 +85,17 @@
     
     
     <script>
-        let player = true;
+        let player = false;
+        let havinto = false;
         let grid = null;
         
-        let ip = "http://192.168.4.22:8000";
+        let ip = "http://192.168.4.23:8000";
         
+        fetchStuff();
+
         // get player
-        fetch(ip + "/tris/turn")
+        async function fetchStuff(){
+            await fetch(ip + "/tris/turn")
         .then(response => {
             return response.json()
         }).then(value => {
@@ -99,7 +103,22 @@
             console.log("giocatore: " + player);
         });
 
-        updateButtons();
+            continuousUpdate();
+        }
+
+        async function continuousUpdate(){
+            while (true){
+                console.log("update");
+                await updateGrid();
+                updateButtons();
+                check();
+                await sleep(2000);
+            }
+        }
+
+        async function check(){
+            grid
+        }
         
         // get turn
         async function getTurn(){
@@ -125,7 +144,7 @@
         // if button clicked
         async function clicked(number){
             let turn = await getTurn();
-            if(document.getElementById("btn" + number).innerHTML != '' || turn != player) return;
+            if(document.getElementById("btn" + number).innerHTML != '' || turn != player || havinto) return;
 
             console.log("player: " + player + ", cell: " + number + ", server turn: " + turn);
             
@@ -153,18 +172,8 @@
             for (let i = 0; i < 9; i++) {
                 let val = grid[i].value;
                 if (val != "N") document.getElementById("btn" + (i + 1)).innerHTML = '<b>' + val + '</b>';
+                else document.getElementById("btn" + (i + 1)).innerHTML = '';
             }
-
-            if (await getTurn() != player)
-                while (true){
-                    console.log("update");
-                    await updateGrid();
-                    if (await getTurn() == player) {
-                        updateButtons();
-                        break;
-                    }
-                    await sleep(2000);
-                }
         }
         
         async function reset(){
@@ -176,7 +185,7 @@
             .then(responce => {
                 console.log(responce)
             });
-
+            havinto = false;
             await updateButtons();
         }
     </script>
