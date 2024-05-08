@@ -30,9 +30,9 @@ create("Verona", "Vicenza", 63.6);
 
 const requestListener = function (req, res) {
     if (req.url === "/getdist" && req.method === "GET"){
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(oggetti));
-    }else {
+    }else if (req.url === "/page" && req.method === "GET"){
         res.writeHead(200, { 'Content-Type': 'text/html' });
         fs.createReadStream("./page.html").pipe(res);
     }

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <head>
     <title>Distance</title>
 </head>
@@ -34,7 +33,7 @@
     let selection2 = document.getElementById("select2");
     let hiddenV1 = null;
     let hiddenV2 = null;
-    let ip = "192.168.1.22";
+    let ip = "192.168.4.22";
 
     function sub(event){
         event.preventDefault();
@@ -43,13 +42,14 @@
     }
 
     async function get() {
-        value = await fetch(`${ip}` + '/getdist')
+        value = await fetch('/getdist')
         .then(response => {
             return response.json();
         })
         .then(value => {
             return value;
-        })
+        });
+        console.log(value);
     }
 
     function sel(sw){

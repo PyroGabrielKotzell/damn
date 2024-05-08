@@ -122,6 +122,7 @@
         // checks who won (if someome did)
         async function check(){
             let chi = await haiVinto();
+            let out = document.getElementById("out");
             if (chi == -1) {
                 if (await pareggio()) chi = 0;
                 else {
@@ -131,7 +132,6 @@
                 }
             }
             fineRound = true;
-            let out = document.getElementById("out");
             if (chi == 0) out.innerHTML = "stalla";
             if (chi == 1) out.innerHTML = "ha vinto il giocatore 1";
             if (chi == 2) out.innerHTML = "ha vinto il giocatore 2";
