@@ -85,7 +85,7 @@
     
     
     <script>
-        let player = false;
+        let player = true;
         let grid = null;
         
         let ip = "http://192.168.4.22:8000";
@@ -97,8 +97,9 @@
         }).then(value => {
             player = value;
             console.log("giocatore: " + player);
-            //updateButtons();
         });
+
+        updateButtons();
         
         // get turn
         async function getTurn(){

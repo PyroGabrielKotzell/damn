@@ -29,8 +29,13 @@ create("Venezia", "Vicenza", 88.1);
 create("Verona", "Vicenza", 63.6);
 
 const requestListener = function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    fs.createReadStream("./page.html").pipe(res);
+    if (req.url === "/getdist" && req.method === "GET"){
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end(JSON.stringify(oggetti));
+    }else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        fs.createReadStream("./page.html").pipe(res);
+    }
 }
 
 const server = http.createServer(requestListener);
