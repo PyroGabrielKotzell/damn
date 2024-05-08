@@ -81,6 +81,8 @@
         <div id="resetButton">
             <button id="resetBtn" onclick="reset()">RESET</button>
         </div>
+        <br>
+        <div id="out"></div>
     </div>
     
     
@@ -89,19 +91,19 @@
         let havinto = false;
         let grid = null;
         
-        let ip = "http://192.168.4.23:8000";
+        let ip = "http://192.168.4.22:8000";
         
         fetchStuff();
 
         // get player
         async function fetchStuff(){
             await fetch(ip + "/tris/turn")
-        .then(response => {
-            return response.json()
-        }).then(value => {
-            player = value;
-            console.log("giocatore: " + player);
-        });
+            .then(response => {
+                return response.json()
+            }).then(value => {
+                player = value;
+                console.log("giocatore: " + player);
+            });
 
             continuousUpdate();
         }
@@ -117,7 +119,15 @@
         }
 
         async function check(){
+            let chi = -1;
             grid
+            if (chi > -1){
+                havinto = true;
+                let out = document.getElementById("out");
+                if (chi == 0) out.innerHTML = "stalla";
+                if (chi == 1) out.innerHTML = "ha vinto il giocatore 1";
+                if (chi == 2) out.innerHTML = "ha vinto il giocatore 2";
+            }
         }
         
         // get turn
@@ -186,6 +196,7 @@
                 console.log(responce)
             });
             havinto = false;
+            document.getElementById("out").innerHTML = '';
             await updateButtons();
         }
     </script>
