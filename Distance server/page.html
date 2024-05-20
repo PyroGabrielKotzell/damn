@@ -24,7 +24,8 @@
         </select><br><br>
         <label>Passa da venezia</label>&nbsp;<input type="checkbox" name="venezia" id="checkbox"><br><br>
         <input type="submit" value="submit" onclick="sub(event)">
-    </form>
+    </form><br>
+    <div id="calc"></div>
 </body>
 </html>
 
@@ -42,14 +43,38 @@
     }
 
     async function get() {
-        value = await fetch('/getdist')
+        let d = document.getElementById("calc");
+        let checkbox = document.getElementById("checkbox");
+        let val = await fetch('/getdist')
         .then(response => {
             return response.json();
         })
         .then(value => {
             return value;
         });
-        console.log(value);
+
+        let s1 = selection1.value, s2 = selection2.value;
+
+        if (!checkbox.checked) {
+            let t = val.find(e => {return (e.nome1 == s1 && e.nome2 == s2)});
+
+            if (s1 == s2) t = {nome1: s1, nome2: s2, distanza: 0.0};
+            else if (!t) t = val.find(e => {return (e.nome1 == s2 && e.nome2 == s1)});
+
+            d.innerHTML = `Da ${s1} a ${s2} ${t.distanza}km`;
+        }else {
+            let t1 = val.find(e => {return (e.nome1 == s1 && e.nome2 == "Venezia")});
+            if (!t1) t1 = val.find(e => {return (e.nome1 == "Venezia" && e.nome2 == s1)});
+
+            let t2;
+            if (s2 == "Venezia") t2 = {nome1: "Venezia", nome2: "Venezia", distanza: 0.0};
+            else {
+                t2 = val.find(e => {return (e.nome1 == "Venezia" && e.nome2 == s2)});
+                if (!t2) t2 = val.find(e => {return (e.nome1 == s2 && e.nome2 == "Venezia")});
+            }
+
+            d.innerHTML = `Da ${s1} a Venezia ${t1.distanza}km + da Venezia a ${s2} ${t2.distanza}km = ${t1.distanza + t2.distanza}km`;
+        }
     }
 
     function sel(sw){
