@@ -1,0 +1,92 @@
+<style>
+    .block{
+        width: 150px;
+        height: 150px;
+        border: solid black;
+        border-radius: 8px;
+        display: inline-block;
+        background-color: #808080;
+    }
+    .label{
+        color: white;
+        border: 2px solid black;
+        border-radius: 4px;
+        -webkit-text-stroke: 0.3px black;
+    }
+    #rval{
+        background-color: #800000;
+    }
+    #gval{
+        background-color: #008000;
+    }
+    #bval{
+        background-color: #000080;
+    }
+    #cval{
+        
+        background-color: #808080;
+    }
+</style>
+
+<head>
+    <title>Colour</title>
+</head>
+<body style="text-align: center; vertical-align: middle; zoom: 130%;">
+    <h1>Colore</h1>
+    <form>
+        <label>Red: </label>&nbsp;<label class="label" id="rval">128, 80</label>
+        <br>
+        <input type="range" name="red" id="red" max="255" onmousemove="labelClicked('red')">
+        <br>
+        <label>Green:</label>&nbsp;<label class="label" id="gval">128, 80</label>
+        <br>
+        <input type="range" name="green" id="green" max="255" onmousemove="labelClicked('green')">
+        <br>
+        <label>Blue:</label>&nbsp;<label class="label" id="bval">128, 80</label>
+        <br>
+        <input type="range" name="blue" id="blue" max="255" onmousemove="labelClicked('blue')">
+        <br><br>
+
+        <label>Color:</label>&nbsp;<label class="label" id="cval">808080</label>
+        <br><br>
+        <div class="block" id="colour"></div>
+    </form>
+</body>
+</html>
+
+<script>
+    let redtxt = document.getElementById("rval");
+    let greentxt = document.getElementById("gval");
+    let bluetxt = document.getElementById("bval");
+    let redslider = document.getElementById("red");
+    let greenslider = document.getElementById("green");
+    let blueslider = document.getElementById("blue");
+    let colour = document.getElementById("colour");
+    let colourtxt = document.getElementById("cval");
+    
+    function sub(event){
+        event.preventDefault();
+    }
+
+    function labelClicked(label){
+        let redhex = (+redslider.value).toString(16), greenhex = (+greenslider.value).toString(16), bluehex = (+blueslider.value).toString(16);
+        if (redhex.length == 1) redhex = '0' + redhex;
+        if (greenhex.length == 1) greenhex = '0' + greenhex;
+        if (bluehex.length == 1) bluehex = '0' + bluehex;
+
+        if (label == "red"){
+            redtxt.innerHTML = redslider.value + ", " + redhex;
+            redtxt.style.backgroundColor =  redhex + "0000";
+        }else if (label == "green"){
+            greentxt.innerHTML = greenslider.value + ", " + greenhex;
+            greentxt.style.backgroundColor = "00" + greenhex + "00";
+        }else {
+            bluetxt.innerHTML = blueslider.value + ", " + bluehex;
+            bluetxt.style.backgroundColor = "0000" + bluehex;
+        }
+
+        let hex = redhex + greenhex + bluehex;
+
+        colour.style.backgroundColor = colourtxt.innerHTML = colourtxt.style.backgroundColor = hex;
+    }
+</script>
