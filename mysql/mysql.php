@@ -8,6 +8,14 @@
 </head>
 
 <style>
+    body {
+        text-align: center;
+    }
+
+    #query {
+        width: -webkit-fill-available;
+        height: 20vh;
+    }
 </style>
 
 <body>
