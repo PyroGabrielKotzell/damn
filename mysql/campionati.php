@@ -14,12 +14,10 @@
         justify-content: center;
     }
 
-    .table {
-        
-    }
-    
+    .table {}
+
     .tableRow {}
-    
+
     .tableData {}
 
     .tableHeader {}
@@ -32,11 +30,23 @@
 </style>
 
 <body>
+    <?php
+    $page = 0;
+    if (isset($_POST['page'])) {
+        $punteggio = $_POST['page'];
+    }
+
+
+    ?>
+
     <form method="post">
+        <input type="hidden" value="<?php echo $page ?>">
         <label>query</label><br>
         <input type="text" name="query" id="query" /><br><br>
         <label>submit</label><br>
-        <input type="submit" name="action" id="action" value="query" /><br><br>
+        <input type="submit" name="action" id="action" value="<-" />
+        <input type="submit" name="action" id="action" value="query" />
+        <input type="submit" name="action" id="action" value="->" /><br><br>
 
         <?php
         $conn = mysqli_connect("localhost", "root", "", "campionati");
@@ -45,7 +55,10 @@
             exit("Errore: impossibile stabilire una connessione " . mysqli_connect_error());
         }
 
-        $page = 0;
+        $action = '';
+        if (isset($_POST['action'])) {
+            $punteggio = $_POST['action'];
+        }
 
         $baseQuery = 'SELECT * FROM campionato LIMIT 25 OFFSET ' . $page * 25;
         $result = mysqli_query($conn, $baseQuery);
@@ -55,6 +68,20 @@
         }
 
         $cRow = $page * 25 + 1;
+
+
+        // FIELDS OUTPUT
+
+        echo '<table class="table"><tr class="tableHeader tableRow">';
+        $fields = mysqli_fetch_fields($result);
+
+        foreach ($fields as $field) {
+            echo '<td class="tableData">';
+            echo $field->name;
+            echo '</td>';
+        }
+
+        echo '<td class="tableData">Actions</td></tr>';
 
         function printData($dataArray, $classes = "")
         {
@@ -66,24 +93,11 @@
             }
 
             echo '<td class="tableButton">';
-            echo '<input type="hidden" name="row" value="' . $GLOBALS['cRow'] . '"/>';
-            echo '<input type="submit" name="action" value="delete"/>';
+            echo '<button type="submit" name="action" value="del' . $GLOBALS['cRow'] . '">Delete</button>';
+            echo '<button type="submit" name="action" value="sav' . $GLOBALS['cRow'] . '">Save</button>';
             echo '</td>';
-
             echo '</tr>';
         }
-
-        echo '<table class="table"><tr class="tableHeader tableRow">';
-
-        foreach (mysqli_fetch_fields($result) as $field) {
-            echo '<td class="tableData">';
-            echo $field->name;
-            echo '</td>';
-        }
-
-        echo '<td class="tableData">Actions</td>';
-
-        echo '</tr>';
 
         while ($row = mysqli_fetch_row($result)) {
             printData($row);
@@ -92,7 +106,21 @@
 
         echo '</table>';
 
-        $query = '';
+        switch ($action) {
+            case '<-': {
+                    if ($page > 0) $page--;
+                    break;
+                }
+            case '->': {
+                    $page++;
+                    break;
+                }
+            case 'query': {
+
+                    break;
+                }
+        }
+
         if (isset($_POST['query']) && $_POST['query'] != "") {
             $query = $_POST['query'];
             $result = mysqli_query($conn, $query);
