@@ -14,12 +14,16 @@
     }
 
     form {
-        margin-top: 10px;
+        border: 2px inset blueviolet;
+        justify-items: center;
         padding: 5px;
-        border-color: blueviolet;
-        border-style: inset;
         box-shadow: 4px 4px 3px black;
         margin-top: 2%;
+    }
+
+    #submit {
+        margin-top: 2px;
+        margin-inline: 2px;
     }
 </style>
 
@@ -28,10 +32,10 @@
         <table>
             <tr>
                 <td>
-                    <label>Id</label>
+                    <label>User</label>
                 </td>
                 <td>
-                    <input type="number" name="userID" />
+                    <input type="text" name="userID" />
                 </td>
             </tr>
             <tr>
@@ -43,6 +47,7 @@
                 </td>
             </tr>
         </table>
+        <input type="submit" name="submit" id="submit" value="register" />
         <input type="submit" name="submit" id="submit" value="login" />
     </form>
 </body>

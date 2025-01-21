@@ -9,6 +9,11 @@ if (isset($_POST['userPassword'])) {
     $userPassword = $_POST['userPassword'];
 }
 
+$submit = '';
+if (isset($_POST['submit'])) {
+    $submit = $_POST['submit'];
+}
+
 $logout = isset($_POST['logout']);
 
 $color = '';

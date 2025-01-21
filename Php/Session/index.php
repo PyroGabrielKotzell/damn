@@ -1,5 +1,6 @@
 <?php
 include 'vars.php';
+include 'utils.php';
 
 if ($logout) {
     setcookie("color", $color, time() + (86400 * 30), "/");

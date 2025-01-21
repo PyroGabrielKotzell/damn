@@ -11,7 +11,7 @@
     body {
         text-align: center;
         justify-items: center;
-        background-color: <?php echo $_COOKIE['color'] ?>;
+        background-color: <?php echo isset($_COOKIE['color']) ? $_COOKIE['color'] : "#ffffff" ?>;
     }
 
     form {
@@ -33,7 +33,7 @@
 <body>
     <form method="post">
         <input type="submit" name="logout" id="logout" value="logout" />
-        <input type="color" name="color" id="color">
+        <input type="color" name="color" id="color" value="<?php echo isset($_COOKIE['color']) ? $_COOKIE['color'] : "" ?>">
     </form>
 </body>
 
