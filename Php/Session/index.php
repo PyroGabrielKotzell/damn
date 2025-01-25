@@ -19,14 +19,6 @@ if ($logout) {
 <body>
     <?php
     session_start();
-    if (isset($_SESSION['logged']) && $_SESSION['logged']) {
-        include 'logged.php';
-    } else {
-        include 'login.php';
-    }
-    ?>
-
-    <?php
     if ($logout) {
         session_unset();
         session_destroy();
@@ -34,11 +26,15 @@ if ($logout) {
         return;
     }
 
-    if ($userID === '' && $userPassword === '') {
-        return;
+    if ($userID != "" && $userPassword != "") {
+        include 'loginning.php';
     }
 
-    include 'loginning.php';
+    if (isset($_SESSION['logged']) && $_SESSION['logged']) {
+        include 'page.php';
+    } else {
+        include 'login.php';
+    }
     ?>
 </body>
 

@@ -1,9 +1,3 @@
-<style>
-    pre {
-
-    }
-</style>
-
 <?php
 $conn = mysqli_connect("localhost", "root", "", "sessione");
 
@@ -11,39 +5,47 @@ if (false === $conn) {
     exit("Errore: impossibile stabilire una connessione " . mysqli_connect_error());
 }
 
-$login = 'SELECT * FROM utente WHERE id = \'' . $userID . '\' AND password LIKE \'' . $userPassword . '%\';';
-$result = mysqli_query($conn, $login);
-
-$otp = 'SELECT * FROM utente WHERE id = \'' . $userID . '\' AND password LIKE \'%-' . $userPassword . '\';';
-$result = mysqli_query($conn, $otp);
-
-if (false === $result) {
-    exit("Errore: impossibile eseguire la query. " . mysqli_error($conn));
-}
-
-$row = mysqli_fetch_assoc($result);
-
-function check($conn, $userID, $userPassword)
+function doQuery($query, $conn)
 {
+    $result = mysqli_query($conn, $query);
+    if (false === $result) {
+        exit("Errore: impossibile eseguire la query. " . mysqli_error($conn));
+    }
+    return $result;
 }
 
-function registerSeq($conn, $userID, $userPassword, $otp = "")
-{
-    if ($otp == "") $otp = randstr();
-    echo '<pre>' . $otp . '</pre>';
-}
+$user = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID';", $conn));
+$login = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID' AND password LIKE '$userPassword+%';", $conn));
+$otp = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID' AND password LIKE '%+$userPassword';", $conn));
+$str = '';
 
 if ($submit == "login") {
-    if ($row && $row['active'] == "1") {
+    if ($otp && $otp['active'] == "0") {
+        doQuery("UPDATE utente SET active = 1 WHERE id = '$userID';", $conn);
         $_SESSION['logged'] = true;
+        $_SESSION['activating'] = false;
+        $_SESSION['rejected'] = "";
         header("Refresh:0");
-    } else if ($row['active'] == "0") {
-        if (check($conn, $userID, $userPassword)) echo '<br>Utente non attivo. Per favore, autenticarsi usando la OneTimePassword.<br>';
-        $pass = $row['password'];
-        registerSeq($conn, $userID, $userPassword, substr($pass, strlen($pass)));
+    } else if ($login && $login['active'] == "1") {
+        $_SESSION['logged'] = true;
+        $_SESSION['activating'] = false;
+        $_SESSION['rejected'] = "";
+        header("Refresh:0");
+    } else if ($login && $login['active'] == "0") {
+        $_SESSION['activating'] = true;
+        $_SESSION['rejected'] = "<br>Usa la OneTimePassword per attivare il tuo account.<br>";
+        $pass = $login['password'];
+        $str = substr($pass, strlen($pass));
     } else {
-        echo '<br>Password o Utente sbagliato.';
+        $_SESSION['rejected'] = "<br>Password o Utente sbagliato.<br>";
     }
 } else if ($submit == "register") {
-    registerSeq($conn, $userID, $userPassword);
+    if ($user) {
+        $_SESSION['rejected'] = "<br>L'Utente esiste già!<br>";
+    } else {
+        $_SESSION['activating'] = true;
+        $_SESSION['rejected'] = "<br>Usa la OneTimePassword per attivare il tuo account.<br>";
+        $str = randstr();
+        doQuery("INSERT INTO utente VALUES ('$userID', '$userPassword+$str', 0);", $conn);
+    }
 }

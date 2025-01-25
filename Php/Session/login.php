@@ -21,6 +21,14 @@
         margin-top: 2%;
     }
 
+    pre {
+        
+    }
+
+    input:invalid {
+        background-color: lightpink;
+    }
+
     #submit {
         margin-top: 2px;
         margin-inline: 2px;
@@ -35,7 +43,7 @@
                     <label>User</label>
                 </td>
                 <td>
-                    <input type="text" name="userID" />
+                    <input type="text" name="userID" pattern="^\S+$" required />
                 </td>
             </tr>
             <tr>
@@ -43,13 +51,21 @@
                     <label>Password</label>
                 </td>
                 <td>
-                    <input type="text" name="userPassword" />
+                    <input type="text" name="userPassword" pattern="^\S+$" required />
                 </td>
             </tr>
         </table>
-        <input type="submit" name="submit" id="submit" value="register" />
+        <input type="submit" name="submit" id="submit" value="register" <?php echo isset($_SESSION['activating']) && $_SESSION['activating'] ? "hidden" : ""; ?> />
         <input type="submit" name="submit" id="submit" value="login" />
     </form>
+    <?php
+    if (isset($_SESSION['rejected']) && $_SESSION['rejected'] != "") {
+        echo $_SESSION['rejected'];
+    }
+    if (isset($_SESSION['activating']) && $_SESSION['activating']) {
+        echo "<pre>$str</pre>";
+    }
+    ?>
 </body>
 
 </html>
