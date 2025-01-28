@@ -14,27 +14,34 @@
         background-color: <?php echo isset($_COOKIE['color']) ? $_COOKIE['color'] : "#ffffff" ?>;
     }
 
-    form {
+    form.base {
         margin-block: 3%;
         width: 90vw;
         padding: 5px;
     }
 
-    #logout {
-        float: right;
+    .logout {
+        justify-self: right;
     }
 
     #color {
-        clear: both;
         margin-top: 2%;
     }
 </style>
 
 <body>
-    <form method="post">
-        <input type="submit" name="logout" id="logout" value="logout" />
+    <?php
+    include 'mysql/users.php';
+    ?>
+    <form method="post" class="base">
+        <div class="logout">
+            <input type="submit" name="submit" id="submit" value="logout" />
+        </div>
         <input type="color" name="color" id="color" value="<?php echo isset($_COOKIE['color']) ? $_COOKIE['color'] : "#ffffff" ?>">
-    </form>
+    </form><br><br>
+    <?php include 'messages.php' ?>
+    <?php
+    ?>
 </body>
 
 </html>

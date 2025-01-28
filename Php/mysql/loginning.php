@@ -5,15 +5,6 @@ if (false === $conn) {
     exit("Errore: impossibile stabilire una connessione " . mysqli_connect_error());
 }
 
-function doQuery($query, $conn)
-{
-    $result = mysqli_query($conn, $query);
-    if (false === $result) {
-        exit("Errore: impossibile eseguire la query. " . mysqli_error($conn));
-    }
-    return $result;
-}
-
 $user = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID';", $conn));
 $login = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID' AND password LIKE '$userPassword+%';", $conn));
 $otp = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID' AND password LIKE '%+$userPassword';", $conn));

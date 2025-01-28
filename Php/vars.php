@@ -14,10 +14,18 @@ if (isset($_POST['submit'])) {
     $submit = $_POST['submit'];
 }
 
-$logout = isset($_POST['logout']);
-
 $color = '';
 if (isset($_POST['color'])) {
     $color = $_POST['color'];
+}
+
+$message = '';
+if (isset($_POST['message'])) {
+    $message = $_POST['message'];
+}
+
+$receiver = '';
+if (isset($_POST['receiver'])) {
+    $receiver = $_POST['receiver'];
 }
 ?>

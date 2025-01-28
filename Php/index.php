@@ -2,7 +2,7 @@
 include 'vars.php';
 include 'utils.php';
 
-if ($logout) {
+if ($submit == "logout") {
     setcookie("color", $color, time() + (86400 * 30), "/");
 }
 ?>
@@ -19,7 +19,7 @@ if ($logout) {
 <body>
     <?php
     session_start();
-    if ($logout) {
+    if ($submit == "logout") {
         session_unset();
         session_destroy();
         header("Refresh:0");
@@ -27,13 +27,14 @@ if ($logout) {
     }
 
     if ($userID != "" && $userPassword != "") {
-        include 'loginning.php';
+        include 'mysql/loginning.php';
+        $_SESSION['userID'] = $userID;
     }
 
     if (isset($_SESSION['logged']) && $_SESSION['logged']) {
-        include 'page.php';
+        include 'pages/page.php';
     } else {
-        include 'login.php';
+        include 'pages/login.php';
     }
     ?>
 </body>

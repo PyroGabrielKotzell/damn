@@ -20,11 +20,7 @@
         box-shadow: 4px 4px 3px black;
         margin-top: 2%;
     }
-
-    pre {
-        
-    }
-
+    
     input:invalid {
         background-color: lightpink;
     }
