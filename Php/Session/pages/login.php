@@ -20,7 +20,7 @@
         box-shadow: 4px 4px 3px black;
         margin-top: 2%;
     }
-    
+
     input:invalid {
         background-color: lightpink;
     }
@@ -51,8 +51,8 @@
                 </td>
             </tr>
         </table>
-        <input type="submit" name="submit" id="submit" value="register" <?php echo isset($_SESSION['activating']) && $_SESSION['activating'] ? "hidden" : ""; ?> />
-        <input type="submit" name="submit" id="submit" value="login" />
+        <button type="submit" name="submit" id="submit" value="login">Login</button>
+        <button type="submit" name="submit" id="submit" value="register" <?php echo isset($_SESSION['activating']) && $_SESSION['activating'] ? "hidden" : ""; ?>>Register</button>
     </form>
     <?php
     if (isset($_SESSION['rejected']) && $_SESSION['rejected'] != "") {

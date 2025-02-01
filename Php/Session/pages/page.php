@@ -35,7 +35,7 @@
     ?>
     <form method="post" class="base">
         <div class="logout">
-            <input type="submit" name="submit" id="submit" value="logout" />
+            <button type="submit" name="submit" id="submit" value="logout">Logout</button>
         </div>
         <input type="color" name="color" id="color" value="<?php echo isset($_COOKIE['color']) ? $_COOKIE['color'] : "#ffffff" ?>">
     </form><br><br>
