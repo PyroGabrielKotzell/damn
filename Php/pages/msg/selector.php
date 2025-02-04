@@ -1,0 +1,7 @@
+<head>
+    <title>Page</title>
+</head>
+<body>
+    
+</body>
+</html>

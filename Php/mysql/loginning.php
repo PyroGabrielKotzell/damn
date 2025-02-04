@@ -16,12 +16,12 @@ if ($submit == "login") {
         $_SESSION['logged'] = true;
         $_SESSION['activating'] = false;
         $_SESSION['rejected'] = "";
-        header("Refresh:0");
+        $_SESSION['userID'] = $userID;
     } else if ($login && $login['active'] == "1") {
         $_SESSION['logged'] = true;
         $_SESSION['activating'] = false;
         $_SESSION['rejected'] = "";
-        header("Refresh:0");
+        $_SESSION['userID'] = $userID;
     } else if ($login && $login['active'] == "0") {
         $_SESSION['activating'] = true;
         $_SESSION['rejected'] = "<br>Usa la OneTimePassword per attivare il tuo account.<br>";
@@ -30,6 +30,7 @@ if ($submit == "login") {
     } else {
         $_SESSION['rejected'] = "<br>Password o Utente sbagliato.<br>";
     }
+    header("Refresh:0");
 } else if ($submit == "register") {
     if ($user) {
         $_SESSION['rejected'] = "<br>L'Utente esiste già!<br>";
@@ -39,4 +40,5 @@ if ($submit == "login") {
         $str = randstr();
         doQuery("INSERT INTO utente VALUES ('$userID', '$userPassword+$str', 0);", $conn);
     }
+    header("Refresh:0");
 }

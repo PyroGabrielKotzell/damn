@@ -29,7 +29,7 @@
         <?php
         while ($row = mysqli_fetch_assoc($fetchUtenti)) {
             $rowid = $row['id'];
-            if ($rowid != $_SESSION['userID']) {
+            if ($rowid != $loggedUser) {
                 echo "<option value=\"$rowid\">$rowid</option>";
             }
         }
@@ -39,24 +39,22 @@
     <input type="submit" name="submit" id="submit" value="send" />
 
     <?php
-    if (isset($_SESSION['rejected']) && $_SESSION['rejected'] != "") {
-        echo $_SESSION['rejected'];
-    }
+    echo $rejected;
+    
     echo '<table>';
     while ($row = mysqli_fetch_assoc($fetchMessaggi)) {
         $rowid = $row['id'];
         $rowsenderid = $row['senderId'];
 
-        if ($userID == $rowsenderid) {
+        if ($loggedUser == $rowsenderid) {
             $rowsenderid = "<b>$rowsenderid</b>";
         }
 
         $rowmessage = $row['message'];
 
-        $detBtn = "";
+        $detBtn = "<button type='submit' name='submit' id='submit' value='det$rowid'>Details</button>";
 
         if (strlen($rowmessage) > 10) {
-            $detBtn = "<button type='submit' name='submit' id='submit' value='det$rowid'>Details</button>";
             if ($rowid != $detail) {
                 $rowmessage = substr($rowmessage, 0, 10) . '...';
             } else {
@@ -81,10 +79,8 @@
     }
     echo '</table>';
     ?>
-</form>
 
-<script>
-    //setTimeout(function() {
-    //    location.reload();
-    //}, 2000);
-</script>
+    <table id="messages">
+
+    </table>
+</form>

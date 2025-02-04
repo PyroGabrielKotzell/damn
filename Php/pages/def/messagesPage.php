@@ -31,7 +31,7 @@
 
 <body>
     <?php
-    include 'mysql/users.php';
+    include 'mysql/messagesHandler.php';
     ?>
     <form method="post" class="base">
         <div class="logout">
@@ -39,9 +39,7 @@
         </div>
         <input type="color" name="color" id="color" value="<?php echo isset($_COOKIE['color']) ? $_COOKIE['color'] : "#ffffff" ?>">
     </form><br><br>
-    <?php include 'messages.php' ?>
-    <?php
-    ?>
+    <?php include 'messagesTable.php' ?>
 </body>
 
 </html>

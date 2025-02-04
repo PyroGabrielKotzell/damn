@@ -55,10 +55,9 @@
         <button type="submit" name="submit" id="submit" value="register" <?php echo isset($_SESSION['activating']) && $_SESSION['activating'] ? "hidden" : ""; ?>>Register</button>
     </form>
     <?php
-    if (isset($_SESSION['rejected']) && $_SESSION['rejected'] != "") {
-        echo $_SESSION['rejected'];
-    }
-    if (isset($_SESSION['activating']) && $_SESSION['activating']) {
+    echo $rejected;
+
+    if ($activating) {
         echo "<pre>$str</pre>";
     }
     ?>

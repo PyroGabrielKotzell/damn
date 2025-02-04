@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'vars.php';
 include 'utils.php';
 
@@ -13,12 +14,10 @@ if ($submit == "logout") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 
 <body>
     <?php
-    session_start();
     if ($submit == "logout") {
         session_unset();
         session_destroy();
@@ -28,13 +27,19 @@ if ($submit == "logout") {
 
     if ($userID != "" && $userPassword != "") {
         include 'mysql/loginning.php';
-        $_SESSION['userID'] = $userID;
     }
 
-    if (isset($_SESSION['logged']) && $_SESSION['logged']) {
-        include 'pages/page.php';
+    if ($logged) {
+        if (str_starts_with($submit, "usr")) {
+            include 'pages/dms/selector.php';
+        } else {
+            include 'pages/msg/selector.php';
+        }
+
+        // default page without api
+        //include 'pages/def/messagesPage.php';
     } else {
-        include 'pages/login.php';
+        include 'pages/login/loginPage.php';
     }
     ?>
 </body>
