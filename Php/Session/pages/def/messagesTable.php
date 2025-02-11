@@ -29,9 +29,7 @@
         <?php
         while ($row = mysqli_fetch_assoc($fetchUtenti)) {
             $rowid = $row['id'];
-            if ($rowid != $loggedUser) {
-                echo "<option value=\"$rowid\">$rowid</option>";
-            }
+            echo "<option value=\"$rowid\">$rowid</option>";
         }
         ?>
     </select>

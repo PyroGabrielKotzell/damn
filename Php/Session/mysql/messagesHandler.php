@@ -1,7 +1,7 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "", "sessione");
 
-$fetchUtenti = doQuery("SELECT id FROM utente WHERE 1;", $conn);
+$fetchUtenti = doQuery("SELECT id FROM utente WHERE id != '$loggedUser';", $conn);
 $detail = str_starts_with($submit, "det") ? substr($submit, 3) : "";
 
 if ($detail != "") {

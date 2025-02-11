@@ -30,11 +30,7 @@ if ($submit == "logout") {
     }
 
     if ($logged) {
-        if (str_starts_with($submit, "usr")) {
-            include 'pages/dms/selector.php';
-        } else {
-            include 'pages/msg/selector.php';
-        }
+        include 'pages/msg/selector.php';
 
         // default page without api
         //include 'pages/def/messagesPage.php';
