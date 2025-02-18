@@ -40,6 +40,14 @@
     #msgbar {
         padding: 5px;
     }
+
+    td#s {
+        background-color: greenyellow;
+    }
+
+    td#d {
+        background-color: red;
+    }
 </style>
 
 <body>
@@ -47,6 +55,8 @@
         <button type="submit" name="submit" id="submit" value="logout">Logout</button>
     </form>
     <div id="msgbar" hidden>
+        <input type="text" id="txt" value="" />
+        <button class="send" onclick="send()">Send</button>
         <button class="exit" onclick="selectUser('')">Exit</button>
     </div>
     <div id="container">
@@ -54,20 +64,44 @@
 </body>
 
 <script>
-    async function doFetch(body = {}) {
-        var a = await fetch("api/chat.php", {
-            method: "post",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        }).then(res => {
-            return res.json();
-        }).then(json => {
-            return json;
-        });
-
+    async function doFetch(method = "post", args = {}) {
+        var a;
+        switch (method) {
+            case "post": {
+                a = await fetch("api/chat.php", {
+                    method: method,
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(args),
+                }).then(res => {
+                    return res.json();
+                }).then(json => {
+                    return json;
+                });
+                break;
+            }
+            case "get": {
+                var str = "?";
+                var argsT = Object.keys(args).map((key) => [key, args[key]]);
+                argsT.forEach(e => {
+                    str += e[0] + "=" + e[1] + "&";
+                });
+                str = str.substr(0, str.length - 1);
+                a = await fetch("api/chat.php" + str, {
+                    method: method,
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }).then(res => {
+                    return res.json();
+                }).then(json => {
+                    return json;
+                });
+            }
+        }
         //console.log(a);
         return a;
     }
@@ -86,9 +120,25 @@
         init();
     }
 
-    function send() {
-        
-        //"message": message,
+    function readMessage() {
+        doFetch("post", {
+            "action": "read",
+            "loggedUser": loggedUser,
+            "seen": selmsg,
+        });
+    }
+
+    async function send() {
+        var txtfield = document.getElementById("txt");
+        message = txtfield.value;
+        txtfield.value = "";
+        await doFetch("post", {
+            "action": "send",
+            "loggedUser": loggedUser,
+            "selectedUser": selected,
+            "message": message,
+        });
+        init();
     }
 
     async function init() {
@@ -100,10 +150,12 @@
             changed = false;
         }
 
-        var response = await doFetch({
+        var action = "users";
+        if (selected != "") action = "messages";
+        var response = await doFetch("get", {
+            "action": action,
             "loggedUser": loggedUser,
             "selectedUser": selected,
-            "seen": selmsg,
         });
 
         if (selected == "") {
@@ -131,23 +183,39 @@
                     var sender = e.senderId;
                     var message = e.message;
                     var read = e.isRead;
+                    var btn = "Details";
+                    var colour = 'id="s"';
 
-                    if (selmsg != id && e.message.length > 10) {
-                        message = e.message.substr(0, 10) + "...";
+                    if (selmsg == id) {
+                        if (!read) {
+                            readMessage();
+                        }
+                        if (message.length > 10) {
+                            id = '';
+                            btn = "Exit";
+                        }
+                    }else {
+                        if (message.length > 10) {
+                            message = message.substr(0, 10) + "...";
+                        }
+                        if (!read) {
+                            message = `<b>${message}</b>`;
+                            colour = 'id="d"';
+                        }
                     }
 
-                    if (selmsg == id && !read) {
-                        readMessage(id);
+                    if (sender == loggedUser) {
+                        sender = `<b>${sender}</b>`;
                     }
 
                     table.innerHTML += `
                     <tr>
-                    <td>${id}</td>
+                    <td>${e.id}</td>
                     <td>${sender}</td>
                     <td>${message}</td>
-                    <td>${read}</td>
+                    <td ${colour}>${read}</td>
                     <td>
-                        <button onclick="selectMessage(${selmsg == e.id ? '' : e.id})">Details</button>
+                        <button onclick="selectMessage(${id})">${btn}</button>
                     </td></tr>
                     `;
                     ids.push(e.id);
