@@ -21,17 +21,29 @@
         justify-self: end;
     }
 
-    table.usrs {}
+    table.usrs {
+        padding-inline: 5px;
+    }
 
     table.usrs tr {}
 
-    table.usrs td {}
+    table.usrs td {
+        border-inline: 1px outset;
+        border-block: 1px outset;
+        padding-inline: 5px;
+    }
 
-    table.msgs {}
+    table.msgs {
+        padding-inline: 5px;
+    }
 
     table.msgs tr {}
 
-    table.msgs td {}
+    table.msgs td {
+        border-inline: 1px outset;
+        border-block: 1px outset;
+        padding-inline: 5px;
+    }
 
     .exit {}
 
@@ -102,7 +114,6 @@
                 });
             }
         }
-        //console.log(a);
         return a;
     }
 
@@ -173,6 +184,17 @@
                     ids.push(e);
                 }
             });
+
+            if (!ids.find(n => n == 'null')) {
+                table.innerHTML += `
+                    <tr>
+                    <td><pre>Deleted Users</pre></td>
+                    <td><button onclick="selectUser('null')">Select</button></td>
+                    </tr>
+                    `;
+                ids.push('null');
+            }
+
         } else {
             var table = document.getElementById("a");
             table.className = "msgs";
@@ -181,37 +203,43 @@
                 if (!ids.find(n => n == e.id)) {
                     var id = e.id;
                     var sender = e.senderId;
+                    var receiver = e.receiverId;
+
+                    if (sender == loggedUser)
+                        sender = `<b>${sender}</b>`;
+                    if (receiver == loggedUser)
+                        receiver = `<b>${receiver}</b>`;
+                    if (!sender) sender = "Deleted User";
+                    if (!receiver) receiver = "Deleted User";
+
+                    var usrs = sender + " > " + receiver;
                     var message = e.message;
                     var read = e.isRead;
                     var btn = "Details";
                     var colour = 'id="s"';
 
                     if (selmsg == id) {
-                        if (!read) {
+                        if (!read)
                             readMessage();
-                        }
+
                         if (message.length > 10) {
                             id = '';
                             btn = "Exit";
                         }
-                    }else {
-                        if (message.length > 10) {
+                    } else {
+                        if (message.length > 10)
                             message = message.substr(0, 10) + "...";
-                        }
+
                         if (!read) {
                             message = `<b>${message}</b>`;
                             colour = 'id="d"';
                         }
                     }
 
-                    if (sender == loggedUser) {
-                        sender = `<b>${sender}</b>`;
-                    }
-
                     table.innerHTML += `
                     <tr>
                     <td>${e.id}</td>
-                    <td>${sender}</td>
+                    <td>${usrs}</td>
                     <td>${message}</td>
                     <td ${colour}>${read}</td>
                     <td>

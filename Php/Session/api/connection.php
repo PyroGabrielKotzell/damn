@@ -2,8 +2,8 @@
 
 class Connection
 {
-	private $instance;
-	private $conn;
+	private static $instance;
+	private static $conn;
 
 	private function __construct() {}
 
@@ -11,10 +11,11 @@ class Connection
 
 	public static function getInstance()
 	{
-		if (!isset(self::$instance)) {
+		if (!isset(self::$instance) || !isset(self::$conn)) {
 			self::$instance = new Connection();
 			self::$conn = mysqli_connect("localhost", "root", "", "sessione");
 		}
+
 		return self::$instance;
 	}
 
@@ -46,6 +47,18 @@ class Connection
 	{
 		$clause1 = "(senderId = '$loggedUser' AND receiverId = '$selectedUser')";
 		$clause2 = "(senderId = '$selectedUser' AND receiverId = '$loggedUser')";
+		$fetchMessaggi = self::doQuery("SELECT * FROM messaggi WHERE $clause1 OR $clause2;");
+		$messaggi = [];
+		while ($row = mysqli_fetch_assoc($fetchMessaggi)) {
+			$messaggi[] = $row;
+		}
+		return $messaggi;
+	}
+
+	function getNull($loggedUser)
+	{
+		$clause1 = "(senderId = '$loggedUser' AND receiverId is null)";
+		$clause2 = "(senderId is null AND receiverId = '$loggedUser')";
 		$fetchMessaggi = self::doQuery("SELECT * FROM messaggi WHERE $clause1 OR $clause2;");
 		$messaggi = [];
 		while ($row = mysqli_fetch_assoc($fetchMessaggi)) {

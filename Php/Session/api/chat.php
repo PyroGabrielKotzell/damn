@@ -30,7 +30,9 @@ switch ($action) {
 		}
 	case "messages": {
 			if ($selectedUser == "") rejectNoUser();
-			$messaggi = $connection->getMessaggi($loggedUser, $selectedUser);
+			$messaggi;
+			if ($selectedUser == "null") $messaggi = $connection->getNull($loggedUser);
+			else $messaggi = $connection->getMessaggi($loggedUser, $selectedUser);
 			echo json_encode($messaggi);
 			break;
 		}

@@ -25,7 +25,8 @@
         background-color: lightpink;
     }
 
-    #submit {
+    #login,
+    #register {
         margin-top: 2px;
         margin-inline: 2px;
     }
@@ -51,8 +52,8 @@
                 </td>
             </tr>
         </table>
-        <button type="submit" name="submit" id="submit" value="login">Login</button>
-        <button type="submit" name="submit" id="submit" value="register" <?php echo isset($_SESSION['activating']) && $_SESSION['activating'] ? "hidden" : ""; ?>>Register</button>
+        <button type="submit" name="submit" id="login" value="login">Login</button>
+        <button type="submit" name="submit" id="register" value="register" <?php echo isset($_SESSION['activating']) && $_SESSION['activating'] ? "hidden" : ""; ?>>Register</button>
     </form>
     <?php
     echo $rejected;
