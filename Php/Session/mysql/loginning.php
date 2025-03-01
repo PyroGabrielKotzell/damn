@@ -5,14 +5,16 @@ if (false === $conn) {
     exit("Errore: impossibile stabilire una connessione " . mysqli_connect_error());
 }
 
-$user = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID';", $conn));
-$login = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID' AND password LIKE '$userPassword+%';", $conn));
-$otp = mysqli_fetch_assoc(doQuery("SELECT * FROM utente WHERE id = '$userID' AND password LIKE '%+$userPassword';", $conn));
+$user = mysqli_fetch_assoc(doQuery($conn, "SELECT * FROM utente WHERE id = ?;", "s", ...[$userID]));
+$tmpVar1 = "$userPassword+%";
+$login = mysqli_fetch_assoc(doQuery($conn, "SELECT * FROM utente WHERE id = ? AND password LIKE ?;", "ss", ...[$userID, $tmpVar1]));
+$tmpVar1 = "%+$userPassword";
+$otp = mysqli_fetch_assoc(doQuery($conn, "SELECT * FROM utente WHERE id = ? AND password LIKE ?;", "ss", ...[$userID, $tmpVar1]));
 $str = '';
 
 if ($submit == "login") {
     if ($otp && $otp['active'] == "0") {
-        doQuery("UPDATE utente SET active = 1 WHERE id = '$userID';", $conn);
+        doQuery($conn, "UPDATE utente SET active = 1 WHERE id = ?;", "s", ...[$userID]);
         $_SESSION['logged'] = true;
         $_SESSION['activating'] = false;
         $_SESSION['rejected'] = "";
@@ -38,7 +40,7 @@ if ($submit == "login") {
         $_SESSION['activating'] = true;
         $_SESSION['rejected'] = "<br>Usa la OneTimePassword per attivare il tuo account.<br>";
         $str = randstr();
-        doQuery("INSERT INTO utente VALUES ('$userID', '$userPassword+$str', 0);", $conn);
+        doQuery($conn, "INSERT INTO utente VALUES (?, ?, 0);", "ss", ...[$userID, "$userPassword+$str"]);
     }
     header("Refresh:0");
 }

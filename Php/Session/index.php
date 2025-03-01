@@ -6,6 +6,17 @@ include 'utils.php';
 if ($submit == "logout") {
     setcookie("color", $color, time() + (86400 * 30), "/");
 }
+
+if ($submit == "logout") {
+    session_unset();
+    session_destroy();
+    header("Refresh:0");
+    return;
+}
+
+if ($userID != "" && $userPassword != "") {
+    include 'mysql/loginning.php';
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,17 +29,6 @@ if ($submit == "logout") {
 
 <body>
     <?php
-    if ($submit == "logout") {
-        session_unset();
-        session_destroy();
-        header("Refresh:0");
-        return;
-    }
-
-    if ($userID != "" && $userPassword != "") {
-        include 'mysql/loginning.php';
-    }
-
     if ($logged) {
         include 'pages/msg/selector.php';
 

@@ -1,14 +1,14 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "", "sessione");
 
-$fetchUtenti = doQuery("SELECT id FROM utente WHERE id != '$loggedUser';", $conn);
+$fetchUtenti = doQuery($conn, "SELECT id FROM utente WHERE id != ?;", "s", ...[$loggedUser]);
 $detail = str_starts_with($submit, "det") ? substr($submit, 3) : "";
 
 if ($detail != "") {
-    doQuery("UPDATE messaggi SET isRead = 1 WHERE id = $detail AND senderId != '$loggedUser';", $conn);
+    doQuery($conn, "UPDATE messaggi SET isRead = 1 WHERE id = ? AND senderId != ?;", "is", ...[$detail, $loggedUser]);
 }
 
-$fetchMessaggi = doQuery("SELECT * FROM messaggi WHERE senderId = '$loggedUser' OR receiverId = '$loggedUser';", $conn);
+$fetchMessaggi = doQuery($conn, "SELECT * FROM messaggi WHERE senderId = ? OR receiverId = ?;", "ss", ...[$loggedUser, $loggedUser]);
 
 if ($submit == "send") {
     $bool = true;
@@ -22,7 +22,7 @@ if ($submit == "send") {
     }
     if ($bool) {
         $_SESSION['rejected'] = "";
-        doQuery("INSERT INTO messaggi (senderId, receiverId, message, isRead) VALUES ('$loggedUser', '$receiver', '$message', 0);", $conn);
+        doQuery($conn, "INSERT INTO messaggi (senderId, receiverId, message, isRead) VALUES (?, ?, ?, 0);", "sss", ...[$loggedUser, $receiver, $message]);
     }
     header("Refresh:0");
 }

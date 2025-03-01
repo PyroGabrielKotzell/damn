@@ -9,11 +9,13 @@ function randstr(int $length = 8, string $keyspace = '0123456789abcdefghijklmnop
     return implode('', $pieces);
 }
 
-function doQuery($query, $conn)
+function doQuery($conn, $query, $vars, &...$_)
 {
-    $result = mysqli_query($conn, $query);
-    if (false === $result) {
-        exit("Errore: impossibile eseguire la query. " . mysqli_error($conn));
+    $statement = mysqli_prepare($conn, $query);
+    if (isset($vars) && isset($_)) {
+        $statement->bind_param($vars, ...$_);
     }
+    $statement->execute();
+    $result = $statement->get_result();
     return $result;
 }
