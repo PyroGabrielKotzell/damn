@@ -5,6 +5,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $method = $_SERVER["REQUEST_METHOD"];
 $action = "";
 $loggedUser = "";
+$token = "";
 $selectedUser = "";
 $seen = "";
 $message = "";
@@ -16,6 +17,9 @@ switch ($method) {
             }
             if (isset($data['loggedUser'])) {
                 $loggedUser = $data['loggedUser'];
+            }
+            if (isset($data['token'])) {
+                $token = $data['token'];
             }
             if (isset($data['selectedUser'])) {
                 $selectedUser = $data['selectedUser'];
@@ -35,20 +39,12 @@ switch ($method) {
             if (isset($_GET['loggedUser'])) {
                 $loggedUser = $_GET['loggedUser'];
             }
+            if (isset($data['token'])) {
+                $token = $data['token'];
+            }
             if (isset($_GET['selectedUser'])) {
                 $selectedUser = $_GET['selectedUser'];
             }
             break;
         }
-}
-
-if ($action == "") {
-    echo json_encode("No Action");
-    exit();
-}
-
-if ($loggedUser == "") {
-    header("", false, 401);
-    echo json_encode("Not Logged");
-    exit();
 }

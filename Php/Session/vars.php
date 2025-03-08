@@ -41,7 +41,4 @@ if (isset($_SESSION['logged'])) $logged = $_SESSION['logged'];
 
 $rejected = '';
 if (isset($_SESSION['rejected'])) $rejected = $_SESSION['rejected'];
-
-$loggedUser = '';
-if (isset($_SESSION['userID']) && $logged) $loggedUser = $_SESSION['userID'];
 ?>

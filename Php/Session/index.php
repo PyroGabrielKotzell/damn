@@ -31,9 +31,6 @@ if ($userID != "" && $userPassword != "") {
     <?php
     if ($logged) {
         include 'pages/msg/selector.php';
-
-        // default page without api
-        //include 'pages/def/messagesPage.php';
     } else {
         include 'pages/login/loginPage.php';
     }

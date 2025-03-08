@@ -1,4 +1,5 @@
 <?php
+include '../utils.php';
 
 class Connection
 {
@@ -24,18 +25,13 @@ class Connection
 		mysqli_close(self::$conn);
 	}
 
-	function doQuery($query)
-	{
-		$result = mysqli_query(self::$conn, $query);
-		if (false === $result) {
-			exit("Errore: impossibile eseguire la query. " . mysqli_error(self::$conn));
-		}
-		return $result;
+	function checkToken($loggedUser, $token) {
+		return mysqli_fetch_assoc(doQuery(self::$conn, "SELECT * FROM tokens WHERE id = ? AND token = ?;", "ss", ...[$loggedUser, $token])) != null;
 	}
 
 	function getUtenti($loggedUser)
 	{
-		$fetchUtenti = self::doQuery("SELECT id FROM utente WHERE id != '$loggedUser' AND active = 1;");
+		$fetchUtenti = doQuery(self::$conn, "SELECT id FROM utente WHERE id != ? AND active = 1;", "s", ...[$loggedUser]);
 		$utenti = [];
 		while ($row = mysqli_fetch_assoc($fetchUtenti)) {
 			$utenti[] = $row['id'];
@@ -45,9 +41,12 @@ class Connection
 
 	function getMessaggi($loggedUser, $selectedUser)
 	{
-		$clause1 = "(senderId = '$loggedUser' AND receiverId = '$selectedUser')";
-		$clause2 = "(senderId = '$selectedUser' AND receiverId = '$loggedUser')";
-		$fetchMessaggi = self::doQuery("SELECT * FROM messaggi WHERE $clause1 OR $clause2;");
+		$fetchMessaggi = doQuery(
+			self::$conn,
+			"SELECT * FROM messaggi WHERE (senderId = ? AND receiverId = ?) OR (senderId = ? AND receiverId = ?);",
+			"ssss",
+			...[$loggedUser, $selectedUser, $selectedUser, $loggedUser]
+		);
 		$messaggi = [];
 		while ($row = mysqli_fetch_assoc($fetchMessaggi)) {
 			$messaggi[] = $row;
@@ -57,9 +56,12 @@ class Connection
 
 	function getNull($loggedUser)
 	{
-		$clause1 = "(senderId = '$loggedUser' AND receiverId is null)";
-		$clause2 = "(senderId is null AND receiverId = '$loggedUser')";
-		$fetchMessaggi = self::doQuery("SELECT * FROM messaggi WHERE $clause1 OR $clause2;");
+		$fetchMessaggi = doQuery(
+			self::$conn,
+			"SELECT * FROM messaggi WHERE (senderId = ? AND receiverId is null) OR (senderId is null AND receiverId = ?);",
+			"ss",
+			...[$loggedUser, $loggedUser]
+		);
 		$messaggi = [];
 		while ($row = mysqli_fetch_assoc($fetchMessaggi)) {
 			$messaggi[] = $row;
@@ -69,10 +71,11 @@ class Connection
 
 	function readMessaggio($loggedUser, $messageId)
 	{
-		self::doQuery("UPDATE messaggi SET isRead = 1 WHERE id = $messageId AND receiverId = '$loggedUser' AND senderId != '$loggedUser';");
+		doQuery(self::$conn, "UPDATE messaggi SET isRead = 1 WHERE id = ? AND receiverId = ? AND senderId != ?;", "iss", ...[$messageId, $loggedUser, $loggedUser]);
 	}
 
-	function writeMessaggio($loggedUser, $selectedUser, $message) {
-		self::doQuery("INSERT INTO messaggi (senderId, receiverId, message, isRead) VALUES ('$loggedUser', '$selectedUser', '$message', 0);");
+	function writeMessaggio($loggedUser, $selectedUser, $message)
+	{
+		doQuery(self::$conn, "INSERT INTO messaggi (senderId, receiverId, message, isRead) VALUES (?, ?, ?, 0);", "sss", ...[$loggedUser, $selectedUser, $message]);
 	}
 }

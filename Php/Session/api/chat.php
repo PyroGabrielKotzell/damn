@@ -1,18 +1,28 @@
 <?php
 
 require_once 'connection.php';
-
-include '../utils.php';
-
-header('Content-Type: application/json', true, 200);
+$connection = Connection::getInstance();
 
 include 'datavars.php';
 
-$conn = mysqli_connect("localhost", "root", "", "sessione");
-$connection = Connection::getInstance();
+header('Content-Type: application/json', true, 200);
 
-if (false === $conn) {
-	exit("Errore: impossibile stabilire una connessione " . mysqli_connect_error());
+function rejectNoAction() {
+	echo json_encode("No Action");
+    exit();
+}
+
+function rejectNotLogged()
+{
+	header("", false, 401);
+	echo json_encode("Not Logged");
+	exit();
+}
+
+function rejectBadAuth() {
+	header("", false, 401);
+	echo json_encode("Bad Auth Error");
+	exit();
 }
 
 function rejectNoUser()
@@ -21,6 +31,12 @@ function rejectNoUser()
 	echo json_encode("Unselected User");
 	exit();
 }
+
+if ($action == "") rejectNoAction();
+
+if ($loggedUser == "") rejectNotLogged();
+
+if (!$connection->checkToken($loggedUser, $token)) rejectBadAuth();
 
 switch ($action) {
 	case "users": {
