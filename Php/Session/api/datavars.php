@@ -39,8 +39,8 @@ switch ($method) {
             if (isset($_GET['loggedUser'])) {
                 $loggedUser = $_GET['loggedUser'];
             }
-            if (isset($data['token'])) {
-                $token = $data['token'];
+            if (isset($_GET['token'])) {
+                $token = $_GET['token'];
             }
             if (isset($_GET['selectedUser'])) {
                 $selectedUser = $_GET['selectedUser'];

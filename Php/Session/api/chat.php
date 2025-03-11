@@ -14,20 +14,20 @@ function rejectNoAction() {
 
 function rejectNotLogged()
 {
-	header("", false, 401);
+	http_response_code(401);
 	echo json_encode("Not Logged");
 	exit();
 }
 
 function rejectBadAuth() {
-	header("", false, 401);
+	http_response_code(401);
 	echo json_encode("Bad Auth Error");
 	exit();
 }
 
 function rejectNoUser()
 {
-	header("", false, 400);
+	http_response_code(400);
 	echo json_encode("Unselected User");
 	exit();
 }

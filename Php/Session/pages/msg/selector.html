@@ -1,5 +1,6 @@
 <script>
-    var loggedUser = "" + <?php echo "'$loggedUser'" ?>;
+    const loggedUser = document.cookie.split("; ").find((e) => e.startsWith("userID="))?.split("=")[1];
+    const token = document.cookie.split("; ").find((e) => e.startsWith("token="))?.split("=")[1];
     var selected = "";
     var selmsg = "";
     var message = "";
@@ -25,8 +26,6 @@
         padding-inline: 5px;
     }
 
-    table.usrs tr {}
-
     table.usrs td {
         border-inline: 1px outset;
         border-block: 1px outset;
@@ -37,17 +36,11 @@
         padding-inline: 5px;
     }
 
-    table.msgs tr {}
-
     table.msgs td {
         border-inline: 1px outset;
         border-block: 1px outset;
         padding-inline: 5px;
     }
-
-    .exit {}
-
-    #container {}
 
     #msgbar {
         padding: 5px;
@@ -135,6 +128,7 @@
         doFetch("post", {
             "action": "read",
             "loggedUser": loggedUser,
+            "token": token,
             "seen": selmsg,
         });
     }
@@ -146,6 +140,7 @@
         await doFetch("post", {
             "action": "send",
             "loggedUser": loggedUser,
+            "token": token,
             "selectedUser": selected,
             "message": message,
         });
@@ -166,6 +161,7 @@
         var response = await doFetch("get", {
             "action": action,
             "loggedUser": loggedUser,
+            "token": token,
             "selectedUser": selected,
         });
 
@@ -229,11 +225,11 @@
                     } else {
                         if (message.length > 10)
                             message = message.substr(0, 10) + "...";
+                    }
 
-                        if (!read) {
-                            message = `<b>${message}</b>`;
-                            colour = 'id="d"';
-                        }
+                    if (!read) {
+                        message = `<b>${message}</b>`;
+                        colour = 'id="d"';
                     }
 
                     table.innerHTML += `

@@ -30,7 +30,7 @@ if ($userID != "" && $userPassword != "") {
 <body>
     <?php
     if ($logged) {
-        include 'pages/msg/selector.php';
+        readfile('pages/msg/selector.html');
     } else {
         include 'pages/login/loginPage.php';
     }
