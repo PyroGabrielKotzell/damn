@@ -1,8 +1,10 @@
 table {
     width: max-content;
     white-space: nowrap;
+    border-inline: 3px inset;
+    border-block: 3px outset;
 }
-tr {}
 td {
     max-width: 25%;
+    border-block: 2px dashed #9A9A9A;
 }

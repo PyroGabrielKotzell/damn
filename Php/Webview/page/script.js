@@ -18,8 +18,12 @@ async function doFetch() {
             var rating = row[1];
             var address = row[2];
             var ip = row[3];
+
+            var rateF = parseFloat(rating) - 1;
+            var R = rateF * 127;
+            var G = 255 - rateF * 51;
             container.innerHTML += `
-            <tr>
+            <tr style="background-color: rgb(${R}, ${G}, 0);">
                 <td>${date}</td>
                 <td>${rating}</td>
                 <td>${address}</td>
