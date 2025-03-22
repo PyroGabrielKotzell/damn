@@ -1,11 +1,22 @@
 table {
-    width: max-content;
+    width: 100%;
     white-space: nowrap;
     border-inline: 3px inset;
     border-block: 3px outset;
 }
 tr {}
 td {
-    max-width: 25%;
+    max-width: 25vw;
     border-block: 2px dashed #9A9A9A;
+}
+pre{
+    float: left;
+    width: 90%;
+    overflow: hidden;
+    margin-block: 3px;
+}
+td button{
+    float: right;
+    align-self: center;
+    margin-block: 3px;
 }

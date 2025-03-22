@@ -11,6 +11,7 @@ async function doFetch() {
     container.innerHTML = "";
     res = JSON.parse(res);
 
+    var i = 0;
     for (const row of res) {
         var date = row[0];
         if (date.match(/^\d{4}-\d{2}-\d{2}/g)) {
@@ -25,11 +26,13 @@ async function doFetch() {
             <tr style="background-color: rgb(${R}, ${G}, 0);">
                 <td>${date}</td>
                 <td>${rating}</td>
-                <td>${address}</td>
+                <td id="${i}"><pre>${address}</pre><button>a</button></td>
                 <td>${ip}</td>
             </tr>
             `;
             await wait(10);
+            if (i >= 100) break;
+            i++;
         }
     }
 }
