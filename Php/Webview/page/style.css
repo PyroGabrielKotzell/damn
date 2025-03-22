@@ -1,16 +1,11 @@
 table {
-    max-width: -webkit-fill-available;
-    width: 100%;
+    width: max-content;
     white-space: nowrap;
     border-inline: 3px inset;
     border-block: 3px outset;
 }
-tr {
-    max-width: -webkit-fill-available;
-    width: 100%;
-}
+tr {}
 td {
     max-width: 25%;
-    overflow: hidden;
     border-block: 2px dashed #9A9A9A;
 }

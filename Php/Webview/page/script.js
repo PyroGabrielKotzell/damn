@@ -11,7 +11,6 @@ async function doFetch() {
     container.innerHTML = "";
     res = JSON.parse(res);
 
-    i = 0;
     for (const row of res) {
         var date = row[0];
         if (date.match(/^\d{4}-\d{2}-\d{2}/g)) {
@@ -30,8 +29,6 @@ async function doFetch() {
                 <td>${ip}</td>
             </tr>
             `;
-            if (i == 100) break;
-            i++;
             await wait(10);
         }
     }
