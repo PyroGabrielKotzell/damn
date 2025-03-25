@@ -1,16 +1,23 @@
 <!DOCTYPE html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webview</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <button onclick="doFetch()">fetch</button>
+    <div class="inputs">
+        <input type="number" id="len" value="100" />
+        <button onclick="doFetch()">fetch</button>
+        <div class="loader"></div>
+    </div>
     <div id="container">
         <table id="table">
         </table>
     </div>
     <script src="script.js"> </script>
 </body>
+
 </html>

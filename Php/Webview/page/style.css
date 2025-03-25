@@ -1,22 +1,125 @@
+/* Misc */
+
+body {
+    width: -webkit-fill-available;
+}
+
+.inputs {
+    --inputH: 20px;
+    height: var(--inputH);
+}
+
+.inputs>* {
+    height: inherit;
+}
+
+/* Table CSS GUI */
+
 table {
     width: 100%;
     white-space: nowrap;
     border-inline: 3px inset;
     border-block: 3px outset;
 }
-tr {}
+
+tr {
+    height: 3vh;
+}
+
 td {
     max-width: 25vw;
+    height: inherit;
     border-block: 2px dashed #9A9A9A;
 }
-pre{
-    float: left;
+
+td>div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    height: inherit;
+}
+
+td>div>pre {
     width: 90%;
     overflow: hidden;
-    margin-block: 3px;
+    margin-block: 1px;
 }
-td button{
-    float: right;
-    align-self: center;
-    margin-block: 3px;
+
+td>div>button {
+    height: inherit;
+    margin-block: 1px;
+}
+
+td>div>button>img {
+    height: 100%;
+}
+
+/* Tooltip CSS */
+
+.hoverable {
+    position: relative;
+}
+
+.hoverable>.text {
+    visibility: hidden;
+    width: 74px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 151%;
+    left: 50%;
+    margin-left: -37px;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.hoverable:hover>.text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hoverable:hover>.text:hover {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.hoverable>.text::after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+/* Loader CSS */
+
+.loader {
+    display: inline-block;
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid #3498db;
+    /* Blue */
+    border-radius: 50%;
+    width: var(--inputH);
+    height: var(--inputH);
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

@@ -1,4 +1,5 @@
 async function doFetch() {
+    var num = document.getElementById("len").value;
     var res = await fetch("../api/api.php")
         .then(res => {
             return res.json();
@@ -26,15 +27,28 @@ async function doFetch() {
             <tr style="background-color: rgb(${R}, ${G}, 0);">
                 <td>${date}</td>
                 <td>${rating}</td>
-                <td id="${i}"><pre>${address}</pre><button>a</button></td>
+                <td id="${i}">
+                    <div>
+                        <pre>${address}</pre>
+                        <button class="hoverable" onclick="copyTxt('${address}')">
+                            <img src="copy_to_clipboard.svg" />
+                            <div class="text">Copy</div>
+                        </button>
+                    </div>
+                </td>
                 <td>${ip}</td>
             </tr>
             `;
             await wait(10);
-            if (i >= 100) break;
+            if (i >= num && num != 0) break;
             i++;
         }
     }
+}
+
+async function copyTxt(text) {
+    navigator.clipboard.writeText(text);
+    alert("Address copied: " + text);
 }
 
 async function wait(mills) {
