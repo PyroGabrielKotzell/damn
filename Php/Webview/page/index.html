@@ -10,11 +10,13 @@
 <body>
     <div class="loading" id="loadercon" hidden>
         <div class="loader"></div>
-        <div class="backgnd"></div>
+        <div class="backgnd" id="backgnd"></div>
     </div>
     <div class="inputs">
         <input type="number" id="len" value="100" />
-        <button onclick="doFetch()">fetch</button>
+        <button id="fetcher" onclick="doFetch()">fetch</button>
+        <input type="checkbox" id="checkbox" name="checkbox" />
+        <label for="checkbox">Loading blocker</label>
     </div>
     <div class="container">
         <table id="table">
