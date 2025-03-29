@@ -5,12 +5,11 @@ body {
 }
 
 .inputs {
-    --inputH: 20px;
-    height: var(--inputH);
+    margin-top: 2vh;
 }
 
-.inputs>* {
-    height: inherit;
+.container {
+    margin-top: 1%;
 }
 
 /* Table CSS GUI */
@@ -102,6 +101,26 @@ td>div>button>img {
 
 /* Loader CSS */
 
+.loading {
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    position: absolute;
+    position-area: center;
+    z-index: 1;
+    text-align: center;
+    align-content: center;
+}
+
+.backgnd {
+    background-color: black;
+    width: inherit;
+    height: inherit;
+    opacity: 60%;
+    position: absolute;
+    position-area: center;
+    z-index: -1;
+}
+
 .loader {
     display: inline-block;
     border: 16px solid #f3f3f3;
@@ -109,8 +128,8 @@ td>div>button>img {
     border-top: 16px solid #3498db;
     /* Blue */
     border-radius: 50%;
-    width: var(--inputH);
-    height: var(--inputH);
+    width: 120px;
+    height: 120px;
     animation: spin 2s linear infinite;
 }
 

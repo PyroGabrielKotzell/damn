@@ -12,6 +12,8 @@ async function doFetch() {
     container.innerHTML = "";
     res = JSON.parse(res);
 
+    var loader = document.getElementById("loadercon");
+    loader.hidden = false;
     var i = 0;
     for (const row of res) {
         var date = row[0];
@@ -44,6 +46,7 @@ async function doFetch() {
             i++;
         }
     }
+    loader.hidden = true;
 }
 
 async function copyTxt(text) {
