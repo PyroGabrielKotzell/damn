@@ -1,9 +1,12 @@
 <script>
-    const loggedUser = document.cookie.split("; ").find((e) => e.startsWith("userID="))?.split("=")[1];
-    const token = document.cookie.split("; ").find((e) => e.startsWith("token="))?.split("=")[1];
+    var loggedUser = document.cookie.split("; ").find((e) => e.startsWith("userID="))?.split("=")[1];
     var selected = "";
     var selmsg = "";
     var message = "";
+    var con;
+    var msgbar;
+    var txtfield;
+    var intervalId;
     var changed = true;
     var ids = [];
 </script>
@@ -21,6 +24,8 @@
     form {
         justify-self: end;
     }
+
+    #container>pre {}
 
     table.usrs {
         padding-inline: 5px;
@@ -107,13 +112,23 @@
                 });
             }
         }
+        if (a == "Session expired") {
+            clearInterval(intervalId);
+            msgbar.hidden = true;
+            con.innerHTML = "";
+
+            document.cookie = "session=expired";
+            con.innerHTML = `
+                <pre>Session expired, please logout or refresh the page.</pre>
+            `;
+            return "";
+        }
         return a;
     }
 
     function selectUser(user) {
         selected = user;
-        var con = document.getElementById("msgbar");
-        con.hidden = user == '';
+        msgbar.hidden = user == '';
         changed = true;
         init();
     }
@@ -127,20 +142,15 @@
     function readMessage() {
         doFetch("post", {
             "action": "read",
-            "loggedUser": loggedUser,
-            "token": token,
             "seen": selmsg,
         });
     }
 
     async function send() {
-        var txtfield = document.getElementById("txt");
         message = txtfield.value;
         txtfield.value = "";
         await doFetch("post", {
             "action": "send",
-            "loggedUser": loggedUser,
-            "token": token,
             "selectedUser": selected,
             "message": message,
         });
@@ -148,8 +158,6 @@
     }
 
     async function init() {
-        var con = document.getElementById("container");
-
         if (changed) {
             ids = [];
             con.innerHTML = `<table id="a" class=""></table>`;
@@ -160,11 +168,10 @@
         if (selected != "") action = "messages";
         var response = await doFetch("get", {
             "action": action,
-            "loggedUser": loggedUser,
-            "token": token,
             "selectedUser": selected,
         });
 
+        if (response == "") return;
         if (selected == "") {
             var table = document.getElementById("a");
             table.className = "usrs";
@@ -248,8 +255,11 @@
         }
     }
 
+    con = document.getElementById("container");
+    msgbar = document.getElementById("msgbar");
+    txtfield = document.getElementById("txt");
     init();
-    setInterval(() => {
+    intervalId = setInterval(() => {
         init();
     }, 5000);
 </script>

@@ -3,26 +3,7 @@ session_start();
 include 'vars.php';
 include 'utils.php';
 
-if ($submit == "logout") {
-    setcookie("color", $color, time() + (86400 * 30), "/");
-}
-
-if ($submit == "logout") {
-    session_unset();
-    session_destroy();
-    setcookie("userID", $userID, time() - 6000, "/");
-    setcookie("token", $tokenStr, array(
-        'expires' => time() - 6000,
-        'path' => "/",
-        'secure' => true,
-    ));
-    header("Refresh:0");
-    return;
-}
-
-if ($userID != "" && $userPassword != "") {
-    include 'mysql/loginning.php';
-}
+include 'mysql/loginning.php';
 ?>
 
 <!DOCTYPE html>

@@ -7,9 +7,10 @@ include 'datavars.php';
 
 header('Content-Type: application/json', true, 200);
 
-function rejectNoAction() {
+function rejectNoAction()
+{
 	echo json_encode("No Action");
-    exit();
+	exit();
 }
 
 function rejectNotLogged()
@@ -19,9 +20,15 @@ function rejectNotLogged()
 	exit();
 }
 
-function rejectBadAuth() {
+function rejectBadAuth()
+{
 	http_response_code(401);
 	echo json_encode("Bad Auth Error");
+	exit();
+}
+
+function rejectSessionExpired(){
+	echo json_encode("Session expired");
 	exit();
 }
 
@@ -36,7 +43,16 @@ if ($action == "") rejectNoAction();
 
 if ($loggedUser == "") rejectNotLogged();
 
-if (!$connection->checkToken($loggedUser, $token)) rejectBadAuth();
+switch ($connection->checkToken($loggedUser, $token)) {
+	case 1: {
+		rejectBadAuth();
+		break;
+	}
+	case 2: {
+		rejectSessionExpired();
+		break;
+	}
+}
 
 switch ($action) {
 	case "users": {

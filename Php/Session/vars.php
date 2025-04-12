@@ -5,6 +5,13 @@ if (isset($_POST['submit'])) {
     $submit = $_POST['submit'];
 }
 
+if (isset($_COOKIE['session'])) {
+    if ($_COOKIE['session'] == "expired") {
+        $submit = 'logout';
+        setcookie("session", "");
+    }
+}
+
 // Login form
 $userID = '';
 if (isset($_POST['userID'])) {

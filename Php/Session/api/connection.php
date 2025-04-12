@@ -25,8 +25,15 @@ class Connection
 		mysqli_close(self::$conn);
 	}
 
-	function checkToken($loggedUser, $token) {
-		return mysqli_fetch_assoc(doQuery(self::$conn, "SELECT * FROM tokens WHERE id = ? AND token = ?;", "ss", ...[$loggedUser, $token])) != null;
+	function checkToken($loggedUser, $token)
+	{
+		$tokenRow = mysqli_fetch_assoc(doQuery(self::$conn, "SELECT * FROM tokens WHERE id = ?;", "s", ...[$loggedUser]));
+		if ($tokenRow) {
+			$tokenStr = $tokenRow["token"];
+			if ($tokenStr == $token) return 0;
+			else return 1;
+		}
+		return 2;
 	}
 
 	function getUtenti($loggedUser)
