@@ -27,7 +27,8 @@ function rejectBadAuth()
 	exit();
 }
 
-function rejectSessionExpired(){
+function rejectSessionExpired()
+{
 	echo json_encode("Session expired");
 	exit();
 }
@@ -45,13 +46,13 @@ if ($loggedUser == "") rejectNotLogged();
 
 switch ($connection->checkToken($loggedUser, $token)) {
 	case 1: {
-		rejectBadAuth();
-		break;
-	}
+			rejectBadAuth();
+			break;
+		}
 	case 2: {
-		rejectSessionExpired();
-		break;
-	}
+			rejectSessionExpired();
+			break;
+		}
 }
 
 switch ($action) {
@@ -78,5 +79,10 @@ switch ($action) {
 			$connection->writeMessaggio($loggedUser, $selectedUser, $message);
 			echo json_encode("Message sent");
 			break;
+		}
+	default: {
+			http_response_code(400);
+			echo json_encode("Operation not supported");
+			die();
 		}
 }

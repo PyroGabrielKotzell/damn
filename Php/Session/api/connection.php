@@ -27,7 +27,7 @@ class Connection
 
 	function checkToken($loggedUser, $token)
 	{
-		$tokenRow = mysqli_fetch_assoc(doQuery(self::$conn, "SELECT * FROM tokens WHERE id = ?;", "s", ...[$loggedUser]));
+		$tokenRow = mysqli_fetch_assoc(doQuery(self::$conn, "SELECT * FROM tokens WHERE id = ?;", "s", $loggedUser));
 		if ($tokenRow) {
 			$tokenStr = $tokenRow["token"];
 			if ($tokenStr == $token) return 0;
@@ -38,7 +38,7 @@ class Connection
 
 	function getUtenti($loggedUser)
 	{
-		$fetchUtenti = doQuery(self::$conn, "SELECT id FROM utente WHERE id != ? AND active = 1;", "s", ...[$loggedUser]);
+		$fetchUtenti = doQuery(self::$conn, "SELECT id FROM utente WHERE id != ? AND active = 1;", "s", $loggedUser);
 		$utenti = [];
 		while ($row = mysqli_fetch_assoc($fetchUtenti)) {
 			$utenti[] = $row['id'];
@@ -52,7 +52,7 @@ class Connection
 			self::$conn,
 			"SELECT * FROM messaggi WHERE (senderId = ? AND receiverId = ?) OR (senderId = ? AND receiverId = ?);",
 			"ssss",
-			...[$loggedUser, $selectedUser, $selectedUser, $loggedUser]
+			$loggedUser, $selectedUser, $selectedUser, $loggedUser
 		);
 		$messaggi = [];
 		while ($row = mysqli_fetch_assoc($fetchMessaggi)) {
@@ -67,7 +67,7 @@ class Connection
 			self::$conn,
 			"SELECT * FROM messaggi WHERE (senderId = ? AND receiverId is null) OR (senderId is null AND receiverId = ?);",
 			"ss",
-			...[$loggedUser, $loggedUser]
+			$loggedUser, $loggedUser
 		);
 		$messaggi = [];
 		while ($row = mysqli_fetch_assoc($fetchMessaggi)) {
@@ -78,11 +78,11 @@ class Connection
 
 	function readMessaggio($loggedUser, $messageId)
 	{
-		doQuery(self::$conn, "UPDATE messaggi SET isRead = 1 WHERE id = ? AND receiverId = ? AND senderId != ?;", "iss", ...[$messageId, $loggedUser, $loggedUser]);
+		doQuery(self::$conn, "UPDATE messaggi SET isRead = 1 WHERE id = ? AND receiverId = ? AND senderId != ?;", "iss", $messageId, $loggedUser, $loggedUser);
 	}
 
 	function writeMessaggio($loggedUser, $selectedUser, $message)
 	{
-		doQuery(self::$conn, "INSERT INTO messaggi (senderId, receiverId, message, isRead) VALUES (?, ?, ?, 0);", "sss", ...[$loggedUser, $selectedUser, $message]);
+		doQuery(self::$conn, "INSERT INTO messaggi (senderId, receiverId, message, isRead) VALUES (?, ?, ?, 0);", "sss", $loggedUser, $selectedUser, $message);
 	}
 }
